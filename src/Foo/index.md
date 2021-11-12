@@ -10,7 +10,7 @@ Demo:
 
 ```tsx
 import React from 'react';
-import { Foo } from 'comp';
+import { Foo } from 'qk-components';
 
 export default () => <Foo title="First Demo" />;
 ```
