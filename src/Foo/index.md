@@ -1,7 +1,11 @@
 ---
 nav:
-  title: Components
+  title: 组件
   path: /components
+group:
+  path: /form
+  title: 表单组件
+  order: 2
 ---
 
 ## Foo

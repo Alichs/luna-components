@@ -1,4 +1,4 @@
-# comp
+# qk-components
 
 ## Getting Started
 
