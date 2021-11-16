@@ -1,7 +1,10 @@
 {
-  "private": true,
+  "private": false,
   "name": "qk-components",
   "version": "1.0.0",
+  "publishConfig": {
+    "registry": "http://nexus.qike366.com/repository/qike-components/"
+  },
   "scripts": {
     "start": "dumi dev",
     "docs:build": "dumi build",
