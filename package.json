@@ -31,9 +31,12 @@
     ]
   },
   "dependencies": {
-    "react": "^16.12.0 || ^17.0.0"
+    "cytoscape": "^3.20.0",
+    "cytoscape-cose-bilkent": "^4.1.0",
+    "react": "^17.0.0"
   },
   "devDependencies": {
+    "@types/cytoscape": "^3.19.0",
     "@umijs/test": "^3.0.5",
     "dumi": "^1.0.17",
     "father-build": "^1.17.2",
