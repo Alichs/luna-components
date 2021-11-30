@@ -1,21 +1,27 @@
 import React, { useEffect, useRef, useState } from 'react';
 import G6 from '@antv/g6';
-import registerEdge from './register-edge';
-import registerNode from './register-node';
+import { Input, Image } from 'antd';
+import registerEdge from './register/register-edge';
+import registerNode from './register/register-node';
+import tooltip from './register/tooltip';
 import data from './dataList';
-import './css/index.less';
+// import { firstNodeColor, rootColor, labelConfig } from './config/config';
+// import EnterpriseTooltip from './component/enterpriseTooltip.tsx';
+import dataTransform from './utils/index';
+import styles from './css/index.less';
+
+const { Search } = Input;
 
 const EnterpriseAtlas: React.FC = () => {
-  const [currentNode, setCurrentNode] = useState({ id: null });
-  const [showInput, setShowInput] = useState(false);
-  const [inputValue, setInputValue] = useState(false);
   const [myGraph, setMyGraph] = useState(null);
-  const [elem, setElem] = useState(null); // 当前点击的搜索节点信息
-  const [input, setInput] = useState({ x: 0, y: 0 });
-  const [list, setList] = useState<{ id: string; label: string }[]>([]); // 超过十条未展开的数据
-  const ref = useRef(null);
+  const [showDropdown, setShowDropdown] = useState(false); // 搜索下拉菜单是否显示
+  const [lists, setLists] = useState({});
+  const [searchNodeId, setSearchNodeID] = useState<string>(''); // 点击的搜索节点的id
+  const ref = useRef<HTMLDivElement>(null);
+  let graph = null;
+
   useEffect(() => {
-    if (!myGraph) {
+    if (!graph) {
       createGraphic();
     }
   }, []);
@@ -34,75 +40,48 @@ const EnterpriseAtlas: React.FC = () => {
     registerEdge(G6);
     registerNode(G6);
 
-    // 点击显示信息tooltip
-    const tooltip = new G6.Tooltip({
-      offsetY: -20,
-      trigger: 'click',
-      itemTypes: ['node'],
-      shouldBegin(e) {
-        console.log(e.target.cfg, 12);
-        const { cfg } = e.target;
-        if (
-          cfg.name === 'node-icon-text' ||
-          cfg.name === 'node-icon-edge' ||
-          cfg.name === 'rect-node-search' ||
-          cfg.name === 'node-search-label'
-        ) {
-          return false;
-        }
-        return true;
-      },
-      getContent(e) {
-        // console.log(e.item.getModel(), 'e---')
-        return `
-          <p class="menu-item" command="edit-node">${
-            e.item.getModel().label
-          }</p>
-        `;
-      },
-      // handleMenuClick(target, item) {
-      //   console.log(item, 'item');
-      //   const command = target.getAttribute('command');
-
-      //   switch (command) {
-      //     case 'edit-node':
-      //       editNode(item);
-      //       break;
-      //     case 'delete-node':
-      //       deleteNode(item);
-      //       break;
-      //   }
-      // },
+    const newData = dataTransform(data);
+    const stashSubtrees: any = {};
+    // 从叶子节点到根节点的由下至上的深度优先遍历树数据。
+    G6.Util.traverseTreeUp(newData, (subtree) => {
+      if (
+        subtree.children &&
+        subtree.children.length > 3 &&
+        subtree.level > 1
+      ) {
+        // overflow true 超出渲染长度 false 没有超出渲染长度
+        // subtree.overflow = true;
+        // 超出渲染长度的数据
+        // const oriChildren = subtree.children;
+        const str1 = JSON.stringify(subtree.children);
+        const arr1 = JSON.parse(str1).slice(0, 2); // 展示的数据
+        const arr2 = JSON.parse(str1).slice(2); // 超出长度的数据项
+        arr1.push({
+          ...arr1[0],
+          id: `${subtree.id}-search`,
+          label: `搜索(${arr2.length})`,
+        }); // 搜索节点
+        subtree.children = arr1;
+        stashSubtrees[`${subtree.id}-search`] = arr2;
+        setLists(stashSubtrees);
+      }
     });
-    const _graph = new G6.TreeGraph({
-      container: ref.current,
-      width: 1000,
-      height: 1000,
-      nodeStateStyles: {
-        hover: {
-          fill: 'red',
-        },
-        selected: {
-          fill: '#fff',
-        },
-      },
+
+    graph = new G6.TreeGraph({
+      container: ref.current!,
+      width: 500,
+      height: 500,
+      fitCenter: true,
+      fitView: true,
       defaultNode: {
         type: 'tree-node',
-        style: {
-          width: 100,
-          height: 30,
-          radius: 4,
-          fill: '#fff',
-          stroke: '#999',
-        },
-        labelCfg: {
-          style: {
-            fontSize: 14,
-          },
-        },
+        anchorPoints: [
+          [0, 0.5],
+          [1, 0.5],
+        ],
       },
       defaultEdge: {
-        type: 'my-tree',
+        type: 'tree-edge',
       },
       layout: {
         type: 'mindmap',
@@ -110,7 +89,7 @@ const EnterpriseAtlas: React.FC = () => {
         getHGap: () => 50,
         getVGap: () => 20,
         getSide: (d) => {
-          if (d.data.site === 'left') {
+          if (d.data.label === '产品营销') {
             return 'left';
           }
           return 'right';
@@ -120,192 +99,144 @@ const EnterpriseAtlas: React.FC = () => {
         default: [
           'drag-canvas',
           'zoom-canvas',
-          'drag-node',
-          {
-            type: 'click-select',
-            // 是否允许该 behavior 发生。若返回 false，被操作的 item 不会被选中，也不会触发 'nodeselectchange' 时机事件
-            shouldBegin: (e) => {
-              // 当点击的图形名为 'text-shape' 时，不允许该 behavior 发生
-              if (e.target.get('name') === 'node-icon') return false;
-              if (e.target.get('name') === 'node-icon-text') return false;
-              if (e.target.get('name') === 'node-icon-edge') return false;
-              return true;
-            },
-          },
+          // {
+          //   type: 'click-select',
+          //   // 是否允许该 behavior 发生。若返回 false，被操作的 item 不会被选中，也不会触发 'nodeselectchange' 时机事件
+          //   shouldBegin: (e) => {
+          //     // 当点击的图形名为 'text-shape' 时，不允许该 behavior 发生
+          //     if (e.target.get('name') === 'node-icon') return false;
+          //     if (e.target.get('name') === 'node-icon-text') return false;
+          //     if (e.target.get('name') === 'node-icon-edge') return false;
+          //     return true;
+          //   },
+          // },
         ],
       },
       plugins: [tooltip],
-      fitView: true,
-      minZoom: 0.7,
-      maxZoom: 1,
     });
-
-    _graph.read({ ...data });
-    setMyGraph(_graph);
-    bindEvents(_graph);
+    graph.data(newData);
+    graph.render();
+    setMyGraph(graph);
+    bindEvents();
   };
 
-  const bindEvents = (graph) => {
+  // 注册事件
+  const bindEvents = () => {
     graph.on('node:click', (e) => {
       const model = e.item.getModel();
-      if (e.target.cfg.name === 'node-icon-text') {
-        /* 展开按钮的事件 */
+      const { name } = e.target.cfg;
+      if (name === 'circle-node' || name === 'circle-text') {
         model.collapsed = !model.collapsed;
         graph.updateItem(e.item, model);
         graph.layout();
-        setShowInput(false);
-      } else if (
-        e.target.cfg.name === 'rect-node-search' ||
-        e.target.cfg.name === 'rect-node-label'
+      }
+      if (
+        name === 'search-node' ||
+        name === 'search-text' ||
+        name === 'marker-icon'
       ) {
-        onSearchClick(e, model, graph);
+        console.log(model, 'model');
+        const { id } = model;
+        setSearchNodeID(id);
+        setShowDropdown(true);
       } else {
-        setShowInput(false);
-        /* 节点点击事件 */
-        // 记录当前节点 id
-        setCurrentNode({ id: model.id });
-        graph.setItemState(model.id, 'selected', true);
+        setShowDropdown(false);
       }
-      e.item.toFront();
-    });
-    graph.on('node:mouseenter', (e) => {
-      if (e.target.cfg.name === 'rect-node') {
-        const node = e.item;
-        // 激活该节点的 hover 状态
-        graph.setItemState(node, 'hover', true);
-      }
-    });
-    // 监听鼠标离开节点事件
-    graph.on('node:mouseleave', (e) => {
-      const node = e.item;
-      // 关闭该节点的 hover 状态
-      graph.setItemState(node, 'hover', false);
     });
     // canvas的点击事件，鼠标左键
     graph.on('canvas:click', (e) => {
-      console.log('canvas');
-      setShowInput(false);
+      setShowDropdown(false);
     });
     // canvas的点击事件，鼠标右键
     graph.on('canvas:dblclick', (e) => {
-      setShowInput(false);
+      setShowDropdown(false);
     });
     // canvas的拖拽事件
     graph.on('canvas:dragstart', (e) => {
-      setShowInput(false);
+      setShowDropdown(false);
     });
   };
 
-  // 编辑节点
-  // const editNode = (item) => {
-  //   const model = item.getModel();
-  //   const { cacheCanvasBBox } = item.get('group').cfg;
-
-  //   setShowInput(true);
-  //   setInputValue(model.label);
-  //   currentNode.id = model.id;
-  //   input.x = cacheCanvasBBox.x + 40;
-  //   input.y = cacheCanvasBBox.y + 40;
-  //   // $nextTick(() => {
-  //   //   $refs.inputController.focus();
-  //   // });
-  // }
-
-  // const deleteNode = (item) => {
-  //   const id = item.get('id');
-
-  //   if(id.length > 1) {
-  //     const parentId = id.substring(0, id.length - 2);
-  //     const parent = graph.findById(parentId);
-
-  //     parent.toFront();
-  //   }
-  //   graph.removeChild(id);
-
-  //   if(id.length > 1) {
-  //     const parentId = id.substring(0, id.length - 2);
-  //     const parent = graph.findById(parentId);
-  //     const model = parent.get('model');
-
-  //     if(model.children.length === 0) {
-  //       const group = parent.get('group');
-  //       const { children } = group.cfg;
-
-  //       const icon = children.find(child => child.name === 'node-icon');
-  //       const iconText = children.find(child => child.name === 'node-icon-text');
-
-  //       if(icon) {
-  //         icon.remove();
-  //         iconText.remove();
-  //       }
-  //     }
-  //   }
-  // }
-
-  const onSearchClick = (e, model, graph) => {
-    setElem(e);
-    const { x, y } = model;
-    const clientXY = graph.getClientByPoint(x, y);
-    setInput({ x: clientXY.x, y: clientXY.y });
-    setShowInput(true);
-    setList(model.child);
+  /* 点击下拉框企业时 */
+  const optionOnClick = (item) => {
+    // 搜多节点实例
+    const node = myGraph.findById(searchNodeId);
+    // console.log(node, 'node')
+    // 搜索节点的父节点信息
+    const parentModel = node._cfg.parent.getModel();
+    const { id: parentId, children } = parentModel;
+    // 剩余企业
+    const searchList = lists[searchNodeId].filter(
+      (child) => child.id !== item.id,
+    );
+    // 添加到图中的企业
+    const model = lists[searchNodeId].filter((child) => child.id === item.id);
+    // 父节点新的数据model
+    const newModel = {
+      ...parentModel,
+      children: children.splice(children.length - 2, 0, model),
+    };
+    console.log(newModel, 'newModel');
+    setLists({ ...lists, [searchNodeId]: searchList });
+    // 没有数据后关闭弹窗，隐藏搜索节点
+    if (searchList.length === 0) {
+      myGraph.removeChild(searchNodeId);
+      setShowDropdown(false);
+    }
+    myGraph.updateChild(newModel, parentId);
   };
 
-  const onOptionClick = (data: { id: string; label: string }) => {
-    // 点击的搜索节点
-    const item = elem.item;
-    console.log(elem.currentTarget, 'currentTarget');
-    const model = item.getModel();
-    const arr = [];
-    const parentId = data.id.slice(0, data.id.length - 2);
-    const parentParentId = data.id.slice(0, data.id.length - 4);
-    const dataSource = myGraph.findDataById(parentId); // 父节点数据源
-    const listData = dataSource.children; // 子节点数据源 children
-    listData.splice(listData.length - 1, 0, data); // 在子节点数据中加入选择的企业
-    for (let i = 0; i < list.length; i++) {
-      if (data.id !== list[i].id) {
-        arr.push(list[i]);
-      }
-    }
-    setList(arr);
-    myGraph.updateChild(dataSource, parentParentId);
-    myGraph.layout();
-    if (arr.length > 0) {
-      // 更新剩余数量
-      item.update({ ...model, child: arr, label: `搜索${arr.length}` });
-      elem.currentTarget.layout(false);
-    } else {
-      item.update({ ...model, child: arr });
-      // 全部添加到树中，删除该搜索节点
-      myGraph.removeChild(model.id);
-    }
-  };
+  // const handleVisible = () => {
+  //   console.log('click');
+  //   const node = graph.findById('1-1');
+  //   console.log(node,'node');
+  //   graph.hideItem('1-1');
+  // }
+
+  // console.log(lists, 'lists')
 
   return (
     <div style={{ width: '100%', height: '100%' }}>
-      <div ref={ref}></div>
-      {showInput && list.length ? (
-        <div
-          className="input-select-box"
-          style={{ top: input.y, left: input.x }}
-        >
-          <input className="input-controller" type="text"></input>
-          {list.map((item) => {
-            return (
-              <div
-                onClick={() => {
-                  onOptionClick(item);
-                }}
-                className="option-item"
-                key={item.id}
-              >
-                {item.label}
-              </div>
-            );
-          })}
+      <div ref={ref}>
+        {/* {
+          showNodeTooltip && <EnterpriseTooltip x={nodeTooltipX} y={nodeTooltipY} />
+        } */}
+        {/* <EnterpriseTooltip x={nodeTooltipX} y={nodeTooltipY} /> */}
+      </div>
+      {/* <button onClick={handleVisible}>隐藏</button> */}
+      {showDropdown && (
+        <div className={styles['my-dropdown-box']}>
+          <div className={styles['dropdown-box-top']}>
+            <span>搜索</span>
+            <span>当前数据过多，请点击您需要展示的数据进行</span>
+            <span>X</span>
+          </div>
+          <Search
+            className={styles['search-input']}
+            placeholder="请输入公司名称"
+          />
+          <div className={styles['dropdown-list-box']}>
+            {lists[searchNodeId]?.length &&
+              lists[searchNodeId].map((item) => {
+                return (
+                  <div
+                    key={item.id}
+                    className={styles['list-item']}
+                    onClick={() => {
+                      optionOnClick(item);
+                    }}
+                  >
+                    <Image
+                      width={52}
+                      preview={false}
+                      src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                    />
+                    <div className={styles['ente-title']}>{item.label}</div>
+                  </div>
+                );
+              })}
+          </div>
         </div>
-      ) : (
-        ''
       )}
     </div>
   );

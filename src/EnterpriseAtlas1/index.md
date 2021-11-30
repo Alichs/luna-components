@@ -8,7 +8,7 @@ group:
   order: 1
 ---
 
-## EnterpriseAtlas-2
+## EnterpriseAtlas-1
 
 Demo:
 

@@ -33,16 +33,61 @@ const EnterpriseAtlas: React.FC = () => {
     }
   }, []);
 
+  console.log(myTreeNode, 'myTreeNode');
+
   const createGraphic = () => {
     registerEdge(G6);
     G6.registerNode('tree-node', {
       ...myTreeNode,
+      options: {
+        size: [60, 20],
+        stroke: '#91d5ff',
+        fill: '#91d5ff',
+        stateStyles: {
+          fill: 'red',
+          hover: {
+            fill: 'red',
+            'circle-text': {
+              stroke: 'blue',
+            },
+          },
+        },
+      },
       getAnchorPoints() {
         return [
           [0, 0.5],
           [1, 0.5],
         ];
       },
+      // setState(name, value, item) {
+      //   if (name === 'collapsed') {
+      //     const marker = item
+      //       .get('group')
+      //       .find((ele) => ele.get('name') === 'collapse-icon');
+      //     const icon = value ? G6.Marker.expand : G6.Marker.collapse;
+      //     marker.attr('symbol', icon);
+      //   }
+      //   console.log(name, value, item)
+      // // },
+      // update(cfg, node, qw) {
+      //   // const { label, collapsed } = cfg;
+      //   const model = node.getModel();
+      //   const children = node.getContainer().get('children');
+      //   const circle = children[0].cfg.children.find(
+      //     (child) => {
+      //       // console.log(child, 1)
+      //       return child.cfg.name === 'circle-text';
+      //     },
+      //   );
+      //   // console.log(circle, 'circle');
+      //   if (circle) {
+      //     circle.attr({
+      //       text: cfg.collapsed ? '+' : '-',
+      //       fill: cfg.collapsed ? 'blue' : 'red',
+      //     });
+      //   }
+      //   console.log(model, circle, 1111);
+      // }
     });
 
     graph = new G6.TreeGraph({
@@ -57,7 +102,7 @@ const EnterpriseAtlas: React.FC = () => {
       //     fill: 'red'
       //   },
       //   selected: {
-      //     fill: '#fff'
+      //     fill: 'red'
       //   }
       // },
       defaultEdge: {
@@ -80,9 +125,9 @@ const EnterpriseAtlas: React.FC = () => {
       },
       fitView: true,
     });
-    appenAutoShapeListener(graph);
     graph.read({ ...data });
     // setgraph(_graph);
+    appenAutoShapeListener(graph);
     bindEvents();
   };
 

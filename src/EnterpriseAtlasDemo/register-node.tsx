@@ -21,17 +21,18 @@ const Card = ({ cfg }) => {
           flexDirection: 'row',
           alignItems: 'center',
         }}
-        onMouseOver={(evt, node, shape, graph) => {
-          console.log(evt, node, shape, graph);
-          if (node) {
-            graph.updateItem(node, {
-              // 节点的样式
-              style: {
-                stroke: 'blue',
-              },
-            });
-          }
-        }}
+        name="rect-box"
+        // onMouseOver={(evt, node, shape, graph) => {
+        //   console.log(evt, node, shape, graph);
+        //   if (node) {
+        //     graph.updateItem(node, {
+        //       // 节点的样式
+        //       style: {
+        //         stroke: 'blue',
+        //       },
+        //     });
+        //   }
+        // }}
       >
         <Rect
           style={{
@@ -45,20 +46,55 @@ const Card = ({ cfg }) => {
             alignItems: 'center',
             cursor: 'pointer',
           }}
-          onMouseOver={(evt, node, shape, graph) => {
-            console.log(evt, node, shape, graph);
-            if (node) {
-              graph.updateItem(node, {
-                // 节点的样式
+          onClick={(evt, node, shape, graph) => {
+            const target = evt.target;
+            const item = evt.item;
+            const model = item?.getModel();
+            console.log(target, item?.hasState('selected'), model);
+            if (item) {
+              console.log(target.cfg, 'target----');
+              graph.updateItem(item, {
                 style: {
-                  stroke: 'blue',
+                  stroke: 'green',
+                },
+                stateStyles: {
+                  hover: {
+                    fill: 'yellow',
+                    'circle-text': {
+                      fill: 'blue',
+                    },
+                  },
+                  selected: {
+                    fill: 'red',
+                    'circle-text': {
+                      fill: 'blue',
+                    },
+                  },
                 },
               });
+              // graph.updateItem(item, model);
+              // const autoPaint = graph.get('autoPaint');
+              // graph.setAutoPaint(false);
+              graph.setItemState(model.id, 'selected', true);
+              graph.paint();
+              item.update(model);
+              // graph.setAutoPaint(autoPaint);
             }
           }}
-          onMouseLeave={(evt, node, shape, graph) => {
-            // console.log(evt, node, shape, graph)
-          }}
+          // onMouseOver={(evt, node, shape, graph) => {
+          //   console.log(evt, node, shape, graph);
+          //   if (node) {
+          //     graph.updateItem(node, {
+          //       // 节点的样式
+          //       style: {
+          //         stroke: 'blue',
+          //       },
+          //     });
+          //   }
+          // }}
+          // onMouseLeave={(evt, node, shape, graph) => {
+          //   // console.log(evt, node, shape, graph)
+          // }}
         >
           <Text
             style={{
@@ -85,6 +121,7 @@ const Card = ({ cfg }) => {
             }}
           >
             <Text
+              name="circle-text"
               style={{
                 fill: colors.circleColor,
                 fontSize: 10,
@@ -93,12 +130,20 @@ const Card = ({ cfg }) => {
                 cursor: 'pointer',
               }}
               onClick={(evt, node, shape, graph) => {
+                const target = evt.target;
+                const item = evt.item;
+                const model = item?.getModel();
+                console.log(evt.target, 'evt.target');
+                console.log(evt.item, 'evt.item');
+                console.log(evt.item?.getModel(), 'model');
                 if (node) {
                   graph.updateItem(node, {
                     collapsed: !collapsed,
                   });
+                  // graph.updateItem(item, model);
                   graph.layout();
                 }
+                evt?.item.toFront();
               }}
             >
               {collapsed ? '+' : '-'}

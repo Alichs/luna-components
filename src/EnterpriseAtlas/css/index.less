@@ -1,32 +1,71 @@
-.g6-component-contextmenu {
-  width: 100px;
-  padding: 6px 0;
-  cursor: pointer;
-  .menu-item {
-    padding: 0 10px;
-    line-height: 26px;
-    &:hover {
-      background: #f0f0f0;
+@borderColor: #dddddd;
+
+.my-dropdown-box {
+  display: flex;
+  flex-direction: column;
+  width: 468px;
+  height: 520px;
+  box-shadow: 0px 0px 6px 0px @borderColor;
+  border-radius: 5px;
+
+  .dropdown-box-top {
+    padding: 0px 16px;
+    height: 48px;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid @borderColor;
+  }
+
+  .dropdown-box-top span:nth-child(1) {
+    font-size: 16px;
+    font-weight: 500;
+    color: #363b4d;
+  }
+
+  .dropdown-box-top span:nth-child(2) {
+    font-size: 12px;
+    font-weight: 500;
+    color: #363b4d;
+    padding-left: 16px;
+  }
+
+  .dropdown-box-top span:nth-child(3) {
+    font-size: 16px;
+    font-weight: 500;
+    color: #999;
+    flex: 1;
+    text-align: right;
+  }
+
+  .search-input {
+    margin: 16px 16px 0px 16px;
+    width: calc(100% - 32px);
+  }
+
+  .dropdown-list-box {
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+
+    .list-item {
+      padding: 16px 16px;
+      display: flex;
+      flex-direction: row;
+      border-bottom: 1px solid @borderColor;
+      align-items: center;
+      cursor: pointer;
+
+      .ente-title {
+        font-size: 16px;
+        font-weight: 500;
+        color: #363b4d;
+        padding-left: 14px;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
     }
-  }
-}
-
-.input-select-box {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 12;
-
-  .input-controller {
-    width: 120px;
-    height: 30px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding-left: 6px;
-    font-size: 14px;
-  }
-
-  .option-item {
-    cursor: pointer;
   }
 }
