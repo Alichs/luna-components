@@ -103,14 +103,14 @@ const styles = {
       'selection-box-color': 'rgba(72, 133, 184, 0.2)',
     },
     node: {
-      width: '60px',
-      height: '60px',
+      width: '70px',
+      height: '70px',
       shape: 'ellipse',
       'border-opacity': 1,
       opacity: 1,
       'overlay-color': '#fff',
       'background-fit': 'none',
-      'background-color': '#4EA2F0',
+      'background-color': '#ECF0FF',
       'background-opacity': 1,
       'text-halign': 'center',
       'text-valign': 'center',
@@ -120,7 +120,7 @@ const styles = {
       'background-position-x': 'data(bgImages.positionX)',
       'background-position-y': 'data(bgImages.positionY)',
       label: function (ele: any) {
-        let label = ele.data().properties.name;
+        let label = ele.data().name;
         var length = label.length;
 
         if (length <= 5) {
@@ -150,9 +150,8 @@ const styles = {
             '..'
           );
         }
-        return;
       },
-      color: '#fff',
+      color: '#4B74FF',
       'font-family': 'Microsoft Yahei',
       'font-size': '12px',
       'text-wrap': 'wrap',
@@ -162,10 +161,17 @@ const styles = {
     /* 'node.blur': {
           'opacity': 0.2,
         }, */
-    'node.keyPerson': {
-      'background-color': '#7f10be',
-      'border-color': '#7f10be',
-      'border-width': '3px',
+    'node.center': {
+      'background-color': '#FF8F00',
+      color: '#fff',
+      width: '80px',
+      height: '80px',
+    },
+    'node.person': {
+      'background-color': '#FEE9E9',
+      color: '#F62828',
+      width: '50px',
+      height: '50px',
     },
     'node.wechat': {
       'background-color': '#21B13F',
@@ -269,20 +275,26 @@ const styles = {
     },
     /* ---------- 关系 ---------- */
     edge: {
-      width: '0.8px',
+      width: '0.5px',
       'line-color': '#9bb7f0',
-      opacity: 1,
+      //opacity: 0.5,
       content: 'data(event)',
-      color: '#707070',
+      // color: '#D4DEFF',
       'font-family': 'Microsoft Yahei',
       'font-size': '12px',
       'min-zoomed-font-size': '12px',
+      'line-style': 'dashed',
       'edge-text-rotation': 'autorotate',
       'curve-style': 'straight',
+      color: '#A8ADBE',
       'text-background-color': '#f6f7f9',
       'text-background-opacity': '1',
       'text-background-shape': 'roundrectangle',
-      // 'target-arrow-shape': 'triangle'
+      'target-arrow-shape': 'triangle',
+      'target-arrow-color': '#D4DEFF',
+      label: function (ele: any) {
+        return ele.data().label;
+      },
     },
     'edge.darken': {
       'text-background-color': '#042544',
