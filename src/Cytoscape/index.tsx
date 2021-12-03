@@ -1,14 +1,32 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import cytoscape from 'cytoscape';
-import graphStyle from './graphStyle';
+import popper from 'cytoscape-popper';
+import Tippy from 'tippy.js';
+import 'tippy.js/dist/tippy.css';
+import 'tippy.js/themes/light.css';
+import defaultStyle from './graphStyle';
 import * as d3 from 'd3';
-import { data } from './data1';
-type TProps = {};
+import { IStyles, IData, INodeTooltip } from './types';
+cytoscape.use(popper);
+type TProps = {
+  styles?: IStyles;
+  data: IData;
+  isShowNodeTip?: boolean;
+  nodeTooltip?: INodeTooltip;
+  clickNodeIsFocus?: boolean;
+  onNodeMouseOver?: (e: any) => void;
+  onNodeMouseOut?: (e: any) => void;
+  onNodeClick?: (e: any) => void;
+};
 
-const PageIndex = (props: TProps) => {
+const PageIndex: React.FC<TProps> = (props) => {
   const [graphContainer, setGraphContainer] = useState<any>(null);
-  const [cy, setCy] = useState<any>(null);
+  let popperRef: any = null;
+  // const [graphEntId,setGraphEntId] = useState<string>('')
+  let cyInit: any = null;
+  // let _currentKeyNo = '29453261288626';
   let _currentKeyNo = '9cce0780ab7644008b73bc2120479d31';
+  const graphEntId = props.entId;
   const formatGraphStyle = (graphStyle: any) => {
     const finalStyle: any = [];
     Object.keys(graphStyle).forEach((key) => {
@@ -16,67 +34,47 @@ const PageIndex = (props: TProps) => {
     });
     return finalStyle;
   };
-
-  useEffect(() => {}, []);
-  const elementsData = useMemo(() => {
-    let nodes = data.nodes.map((item) => {
-      return { data: item };
-    });
-    let edges = data.edges.map((item) => {
-      return {
-        data: {
-          source: item.startNode,
-          target: item.endNode,
-        },
-      };
-    });
-    return { nodes, edges };
-  }, [data]);
-
   // 数据处理：根据nodeId获取node 索引
   const getNodesIndex = (nodeId: any, nodes: any) =>
     nodes.findIndex((node: any) => nodeId == node.nodeId);
 
-  const getNodeCls = (label: any) => {
-    if (label.includes('Person')) {
+  const getNodeCls = (personId: any) => {
+    if (personId !== undefined) {
       return 'person';
     }
+    return '';
   };
 
   // 数据处理：将原始数据转换成graph数据
-  function getRootData(list: any) {
+  const getRootData = (list: any) => {
     let graph: any = { nodes: [], links: [] };
 
     let rootNode = null;
     list.nodes.forEach((node: any) => {
       let map: any = {
         nodeId: node.id,
-        data: {
-          obj: node,
-        },
+        data: node,
         layout: {
           level: null,
         },
-        classes: getNodeCls(node.labels),
+        classes: getNodeCls(node.personId),
       };
       // 设置_rootNode
-      if (_currentKeyNo == node.properties.keyNo) {
+      if (node.id === 0) {
         rootNode = map;
         map.classes = 'center';
       }
       graph.nodes.push(map);
     });
 
-    list.edges.forEach((edge: any) => {
+    list.edges.forEach((edge: any, index: number) => {
       let map = {
-        data: {
-          obj: edge,
-        },
-        sourceNode: getGraphNode(edge.startNode, graph.nodes),
-        targetNode: getGraphNode(edge.endNode, graph.nodes),
-        linkId: edge.id,
-        source: getNodesIndex(edge.startNode, graph.nodes),
-        target: getNodesIndex(edge.endNode, graph.nodes),
+        data: edge,
+        sourceNode: getGraphNode(edge.source, graph.nodes),
+        targetNode: getGraphNode(edge.target, graph.nodes),
+        linkId: index,
+        source: getNodesIndex(edge.source, graph.nodes),
+        target: getNodesIndex(edge.target, graph.nodes),
       };
 
       graph.links.push(map);
@@ -84,7 +82,7 @@ const PageIndex = (props: TProps) => {
 
     setLevel(rootNode, graph.links);
     return graph;
-  }
+  };
   //获取相邻的节点
 
   function getNextNodes(nodeId: any, links: any, parentLevel: any) {
@@ -128,47 +126,6 @@ const PageIndex = (props: TProps) => {
     });
 
     return nodeIndex > -1 && nodes[nodeIndex];
-  };
-
-  const drawGraph = (elements: any) => {
-    debugger;
-    let cyInit = cytoscape({
-      container: graphContainer,
-      motionBlur: false,
-      textureOnViewport: false,
-      wheelSensitivity: 0.1,
-      elements: elements,
-      minZoom: 0.4,
-      maxZoom: 2.5,
-      layout: {
-        name: 'preset',
-      },
-      style: formatGraphStyle(graphStyle.groupStyle),
-    });
-    // cyInit.center()
-    setCy(cyInit);
-
-    // 定位
-    cyInit.nodes().positions(function (node, i) {
-      // 保持居中
-      if (node._private.data.keyNo == _currentKeyNo) {
-        var position = cyInit.pan();
-        cyInit.pan({
-          x: position.x - node._private.data.d3x,
-          y: position.y - node._private.data.d3y,
-        });
-      }
-
-      //
-      return {
-        x: node._private.data.d3x,
-        y: node._private.data.d3y,
-      };
-    });
-
-    cyInit.ready(function () {
-      cyInit.zoom(1);
-    });
   };
 
   const filterLinks = (graph: any) => {
@@ -244,7 +201,7 @@ const PageIndex = (props: TProps) => {
     var strength = -600,
       distanceMax = 330,
       theta = 0,
-      distance = 130,
+      distance = 230,
       colideRadius = 35,
       distanceMin = 400;
     // 根据节点数量调节
@@ -287,34 +244,17 @@ const PageIndex = (props: TProps) => {
       );
   };
 
-  const getLinkLabel = (link: any) => {
-    var type = link.data.obj.type,
-      role = link.data.obj.properties.role;
-    if (type == 'INVEST') {
-      return '投资';
-    } else if (type == 'EMPLOY') {
-      return role ? role : '任职';
-    } else if (type == 'LEGAL') {
-      return '法定代表人';
-    }
-  };
-
   //将rootData转换成cy图谱框架所需要的数据结构
   const transformData = (graphData: any) => {
     var els: any = { nodes: [], edges: [] };
-
     graphData.links.forEach((link: any, i: any) => {
-      var label = getLinkLabel(link);
-
       els.edges.push({
         data: {
-          data: link.data,
-          id: link.linkId,
-          label: label,
+          label: link.data.label,
           source: link.sourceNode.nodeId,
           target: link.targetNode.nodeId,
         },
-        classes: link.classes,
+        // classes: link.classes,
       });
     });
 
@@ -322,14 +262,13 @@ const PageIndex = (props: TProps) => {
       els.nodes.push({
         data: {
           nodeId: node.nodeId,
-          type: node.data.obj.labels[0],
-          keyNo: node.data.obj.properties.keyNo,
-          data: node.data,
+          entId: node.data.entId,
           id: node.nodeId,
-          name: node.data.obj.properties.name,
+          name: node.data.label,
           layout: node.layout,
           d3x: node.x,
           d3y: node.y,
+          pic: node.data.pic,
         },
         classes: node.classes,
       });
@@ -337,26 +276,133 @@ const PageIndex = (props: TProps) => {
 
     return els;
   };
+  const toggelBlur = (type: string) => {
+    if (type === 'blur') {
+      cyInit.collection('node').addClass('blur');
+      cyInit.collection('edge').addClass('blur');
+    } else {
+      cyInit.collection('node').removeClass('blur');
+      cyInit.collection('edge').removeClass('blur');
+    }
+  };
+  const handleNodeClick = (e: any) => {
+    let node = e.target;
+    if (props.clickNodeIsFocus) {
+      toggelBlur('blur');
+      node.removeClass('blur');
+      node.neighborhood('edge').removeClass('blur');
+      node.neighborhood('edge').connectedNodes().removeClass('blur');
+    }
+    props.onNodeClick && props.onNodeClick(node);
+  };
+  const onMouseOver = (e: any) => {
+    if (props.isShowNodeTip) {
+      let node = e.target;
+      let ref: any = node.popperRef();
+      let dummyDomEle: any = document.createElement('div');
 
+      popperRef = new (Tippy as any)(dummyDomEle, {
+        // tippy props:
+        getReferenceClientRect: ref.getBoundingClientRect,
+        trigger: 'manual',
+        theme: 'light',
+        arrow: false,
+        offset: [0, 10],
+        ...props.nodeTooltip,
+        content:
+          '的方式的历史考虑到法拉利可是到了开发打算考虑到加拉加斯的绿卡暑假快乐到家啊阿喀琉斯建档立卡技术的卢卡斯ask了解大世界酒店商',
+      });
+      popperRef.show();
+    }
+    props.onNodeMouseOver && props.onNodeMouseOver(e);
+  };
+  const onMouseOut = (e: any) => {
+    if (props.isShowNodeTip) {
+      let node = e.target;
+
+      popperRef && popperRef.destroy();
+    }
+    props.onNodeMouseOut && props.onNodeMouseOut(e);
+  };
+  const handleClick = (e: any) => {
+    if (e.target === cyInit && props.clickNodeIsFocus) {
+      toggelBlur('focus');
+    }
+  };
+  const bindEvent = (cyInit: any) => {
+    cyInit
+      .on('click', 'node', handleNodeClick)
+      .on('mouseover', 'node', onMouseOver)
+      .on('mouseout', 'node', onMouseOut)
+      .on('click', handleClick)
+      .ready(() => {
+        cyInit.zoom(1);
+      });
+  };
+  const drawGraph = (elements: any) => {
+    cyInit = cytoscape({
+      container: graphContainer,
+      motionBlur: false,
+      textureOnViewport: false,
+      wheelSensitivity: 0.1,
+      elements: elements,
+      minZoom: 0.4,
+      maxZoom: 2.5,
+      layout: {
+        name: 'preset',
+      },
+      style: formatGraphStyle(defaultStyle.defaultStyle),
+    });
+
+    // 定位
+    cyInit.nodes().positions((node: any, i: any) => {
+      // 保持居中
+      if (node._private.data.id == 0) {
+        var position = cyInit.pan();
+        cyInit.pan({
+          x: position.x - node._private.data.d3x,
+          y: position.y - node._private.data.d3y,
+        });
+      }
+
+      //
+      return {
+        x: node._private.data.d3x,
+        y: node._private.data.d3y,
+      };
+    });
+    //绑定事件
+    bindEvent(cyInit);
+  };
   // 图谱、筛选面板更新
   const domUpdate = (graphData: any) => {
     getD3Position(graphData);
 
-    setTimeout(function () {
+    setTimeout(() => {
       drawGraph(transformData(graphData));
     }, 500);
   };
 
   useEffect(() => {
-    if (graphContainer) {
-      let res = getRootData(data);
+    if (graphContainer && props?.data?.nodes?.length > 0) {
+      let res = getRootData(props.data);
       domUpdate(res);
     }
-  }, [graphContainer]);
+  }, [graphContainer, props.data]);
 
   return (
-    <div ref={setGraphContainer} style={{ height: '100vh', width: '100%' }} />
+    <>
+      <div ref={setGraphContainer} style={{ height: '100vh', width: '100%' }} />
+    </>
   );
 };
 
+PageIndex.defaultProps = {
+  nodeTooltip: {
+    placement: 'bottom',
+    duration: 1000,
+  },
+  isShowNodeTip: true,
+  clickNodeIsFocus: true,
+};
 export default PageIndex;

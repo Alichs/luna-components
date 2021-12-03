@@ -33,8 +33,10 @@
   "dependencies": {
     "cytoscape": "^3.20.0",
     "cytoscape-cose-bilkent": "^4.1.0",
+    "cytoscape-popper": "^2.0.0",
     "echarts": "^5.2.2",
-    "react": "^17.0.0"
+    "react": "^17.0.0",
+    "tippy.js": "^6.3.7"
   },
   "devDependencies": {
     "@types/cytoscape": "^3.19.0",
