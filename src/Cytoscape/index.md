@@ -12,19 +12,28 @@ Demo:
 import React from 'react';
 import { Cytoscape } from 'qk-components';
 //import { data } from './data1';
-import { data } from './data3';
+import { data } from './data';
 
 //export default () => <Foo title="First Demo" />;
-export default () => <Cytoscape data={data} entId="eMBp0ahTid3" />;
+export default () => <Cytoscape data={data} />;
 ```
 
 ### Api
 
-| 属性   | 类型   | 是否必填 | 默认值 | 说明            |
-| ------ | ------ | -------- | ------ | --------------- |
-| data   | object |          |        | 画布的数据      |
-| styles | object |          |        | 画布的样式      |
-| entId  | string |          |        | 中心点的企业 id |
+| 属性             | 类型         | 是否必填 | 默认值 | 说明                                      |
+| ---------------- | ------------ | -------- | ------ | ----------------------------------------- |
+| data             | object       | 是       |        | 画布的数据                                |
+| styles           | object       | 否       |        | 画布的样式                                |
+| isShowNodeTip    | object       | 否       | true   | 是否展示节点 hover tip                    |
+| isShowEdgeTip    | object       | 否       | true   | 是否展示 edge tip                         |
+| nodeTooltip      | object       | 否       |        | 参考： https://atomiks.github.io/tippyjs/ |
+| edgeTooltip      | object       | 否       |        | 参考： https://atomiks.github.io/tippyjs/ |
+| clickNodeIsFocus | object       | 否       | true   | 点击节点是否聚焦                          |
+| onNodeClick      | (node)=>void | 否       |        | 点击节点事件                              |
+| onNodeMouseOver  | (node)=>void | 否       |        | 节点 hover 事件                           |
+| onNodeMouseOut   | (node)=>void | 否       |        | 节点滑过 out 事件                         |
+| onMouseOutLine   | (edge)=>void | 否       |        | 边滑过 out 事件                           |
+| onMouseOverLine  | (edge)=>void | 否       |        | 边滑过 out 事件                           |
 
 ### data 画布中的数据
 
@@ -32,36 +41,24 @@ export default () => <Cytoscape data={data} entId="eMBp0ahTid3" />;
 {
   nodes:[
      {
-      id: '-1358610521084390847',
-      labels: ['Company'],
-      properties: {
-        keyNo: '8ac8b7d155b9f0884afea48122f48b76',
-        name: '启客（北京）科技有限公司',
-        hasImage: false,
-        status: '存续',
-        registCapi: '1000.000',
-        econKind: '有限责任公司（自然人投资或控股）',
-      },
+      id: 1,
+      entId: 'eMBp0ahTid3',
+      personId: '31034675',
+      label: '刘芹',
+      pic: 'https://co-image.qichacha.com/PersonImage/p4c25ab66114eb92232de453dfcc05c1.jpg',
     },
   ],
    edges: [
     {
-      id: 'fceb7a4d4846862fb638effce8840029',
-      type: 'EMPLOY',
-      startNode: '-3372724639231345895',
-      endNode: '-2886766351330904521',
-      properties: {
-        role: '董事',
-      }
+     source: 1,
+      target: 0,
+      label: '董事',
     },
     {
-      id: 'dee2f865c85b50386f5e4c457878790e',
-      type: 'EMPLOY',
-      startNode: '4398339438282696539',
-      endNode: '-2886766351330904521',
-      properties: {
-        role: '监事',
-      }
+      source: 6,
+      target: 0,
+      label: '投资',
+      investRatio: '10.06654', //若想边有Hover效果则investRatio不能为空
     }
     ]
 }
@@ -96,16 +93,16 @@ styles={
       padding: '4px',
       'background-image-crossorigin': 'anonymous',
     },
-    'node.center': {
+    'node.center': { //中心点样式
       'background-color': '#FF8F00',
       color: '#fff',
       width: '80px',
       height: '80px',
     },
-    'node.focus': {
+    'node.focus': { //聚焦样式
       'opacity': 1
     },
-    'node.blur': {
+    'node.blur': {//失焦样式
       'opacity': 0.2,
       'label': ''
     },
@@ -132,6 +129,27 @@ styles={
         return ele.data().label;
       },
     },
+    'edge:selected': { //点击选中边的样式
+      'color': '#F62828',
+      'line-color': '#F62828',
+      'target-arrow-color': '#F62828',
+    },
+    'edge.hover': {//鼠标滑过edge的样式
+      'opacity': 1,
+      'color': '#F62828',
+      'line-color': '#F62828',
+      'target-arrow-color': '#F62828',
+    },
+    'edge.focus': {//聚焦的样式
+      'opacity': 1,
+      'color': '#F62828',
+      'line-color': '#F62828',
+      'target-arrow-color': '#F62828',
+    },
+    'edge.blur': {
+      opacity: 0.2,
+      content: '',
+    }
 }
 ```
 

@@ -102,81 +102,39 @@ const styles = {
       // 'line-style': 'dashed',
       'edge-text-rotation': 'autorotate',
       'curve-style': 'bezier',
-      color: '#F62828',
+      color: '#999',
       'text-background-color': 'none',
       'text-background-opacity': '0',
       'text-background-shape': 'roundrectangle',
       'target-arrow-shape': 'triangle',
-      'target-arrow-color': '#F62828',
+      'target-arrow-color': '#999',
       label: function (ele: any) {
         return ele.data().label;
       },
     },
-    'edge.darken': {
-      'text-background-color': '#042544',
+    'edge.person': {
+      'line-color': '#F62828',
     },
     'edge:selected': {
-      'line-color': '#fbba0a',
-      // 'target-arrow-color': '#fbba0a'
+      color: '#F62828',
+      'line-color': '#F62828',
+      'target-arrow-color': '#F62828',
+    },
+    'edge.hover': {
+      opacity: 1,
+      color: '#F62828',
+      'line-color': '#F62828',
+      'target-arrow-color': '#F62828',
     },
     'edge.focus': {
       opacity: 1,
+      color: '#F62828',
+      'line-color': '#F62828',
+      'target-arrow-color': '#F62828',
     },
     'edge.blur': {
       opacity: 0.2,
       content: '',
-    },
-    // 有向边
-    /* 'edge.blureed': {
-           'opacity': 0.2,
-         }, */
-    '.hidenodes': {
-      'background-color': '#333',
-      'line-color': '#333',
-    },
-    /* ---------- zoom变化 ---------- */
-    '.hidtxt': {
-      content: '',
-    },
-
-    '.showname': {
-      content(ele) {
-        return ele.data('name');
-      },
-    },
-    /* {
-            selector: '.event.hidicon',
-            css: {
-                'display': 'none'
-            }
-        }, */
-    '.showbigger': {
-      content(ele) {
-        return ele.data('detail');
-      },
-    },
-    '.showsmall': {
-      content: '',
-    },
-    'node.showtiny:selected': {
-      'border-width': '10px',
-    },
-    // 有向边
-    'edge.directed': {
-      'line-color': '#9bb7f0',
-      'target-arrow-shape': 'triangle',
-      'target-arrow-color': '#9bb7f0',
-    },
-    'edge.directed:selected': {
-      'line-color': '#fbba0a',
-      'target-arrow-shape': 'triangle',
-      'target-arrow-color': '#fbba0a',
-    },
-    '.hide': {
-      opacity: 0,
-    },
-    '.blur': {
-      opacity: 0.2,
     },
   },
 };
