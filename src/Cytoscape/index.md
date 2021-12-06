@@ -1,7 +1,11 @@
 ---
 nav:
-  title: Components
+  title: 组件
   path: /components
+group:
+  path: /business
+  title: 业务组件
+  order: 1
 ---
 
 ## Cytoscape
