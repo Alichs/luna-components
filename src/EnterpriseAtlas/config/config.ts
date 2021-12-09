@@ -1,3 +1,5 @@
+export const baseColor = '#4B74FF';
+
 export const circleColor = '#D2D5E1';
 
 export const labelColor = '#363B4D';
@@ -89,9 +91,9 @@ export const firstNodeColor = {
     border: '#C9CEEB',
   },
   '008': {
-    label: '#6E8EFC',
-    bg: '#DFECFF',
-    border: '#BBD0F0',
+    label: '#FE774C',
+    bg: '#FFEBE5',
+    border: '#F6D0C5',
   },
 };
 
