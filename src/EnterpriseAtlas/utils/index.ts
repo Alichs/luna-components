@@ -2,6 +2,7 @@ import { firstNodeColor, rootColor, labelConfig } from '../config/config';
 
 const dataTransform = (data: any, isSide?: boolean) => {
   const changeData = (d: any, level = 0, nodeType?: string) => {
+    console.log(d, 'd');
     const data = {
       ...d,
       level,

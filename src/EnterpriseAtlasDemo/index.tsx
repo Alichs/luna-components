@@ -6,7 +6,7 @@ import myTreeNode from './register-node.tsx';
 import data from './dataList';
 import './css/index.less';
 
-const EnterpriseAtlas: React.FC = () => {
+const EnterpriseAtlasDemo: React.FC = () => {
   const ref = useRef(null);
   let graph = null;
   useEffect(() => {
@@ -146,4 +146,4 @@ const EnterpriseAtlas: React.FC = () => {
   );
 };
 
-export default EnterpriseAtlas;
+export default EnterpriseAtlasDemo;

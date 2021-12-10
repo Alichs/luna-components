@@ -2,7 +2,6 @@
 import React from 'react';
 import { Image } from 'antd';
 import styles from '../css/tooltip.less';
-import { tags } from '@umijs/deps/compiled/mustache';
 
 interface PropTypes {
   data: {
@@ -53,7 +52,7 @@ const MyTooltip: React.FC<PropTypes> = ({ data, x, y }) => {
             height={52}
             src={`${data.pic}!qikewater`}
             preview={false}
-            fallback={require('@/assets/enter.png')}
+            // fallback={require('@/assets/enter.png')}
             className="img-logo"
           />
         </div>
