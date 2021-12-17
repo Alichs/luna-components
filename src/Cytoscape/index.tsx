@@ -45,7 +45,6 @@ const PageIndex: React.FC<TProps> = (props) => {
   const transformData = (graphData: any) => {
     let els: any = { nodes: [], edges: [] };
     graphData.links.forEach((link: any, i: any) => {
-      debugger;
       els.edges.push({
         data: link.data,
         classes: link.classes,
@@ -55,6 +54,7 @@ const PageIndex: React.FC<TProps> = (props) => {
     graphData.nodes.forEach((node: any) => {
       els.nodes.push({
         data: {
+          ...node.data,
           entId: node.data.entId,
           id: node.id,
           name: node.data.label,
