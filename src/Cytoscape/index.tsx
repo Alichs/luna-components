@@ -13,6 +13,8 @@ type TProps = {
   data: IData;
   isShowNodeTip?: boolean;
   isShowEdgeTip?: boolean;
+  width?: number | string;
+  height?: number | string;
   nodeTooltip?: INodeTooltip;
   edgeTooltip?: INodeTooltip;
   clickNodeIsFocus?: boolean;
@@ -214,13 +216,17 @@ const PageIndex: React.FC<TProps> = (props) => {
   useEffect(() => {
     if (graphContainer && props?.data?.nodes?.length > 0) {
       let res = transformToGraphData(props.data);
+
       domUpdate(res);
     }
   }, [graphContainer, props.data]);
 
   return (
     <>
-      <div ref={setGraphContainer} style={{ height: '100vh', width: '100%' }} />
+      <div
+        ref={setGraphContainer}
+        style={{ height: props.height, width: props.width }}
+      />
     </>
   );
 };
@@ -233,5 +239,7 @@ PageIndex.defaultProps = {
   isShowNodeTip: true,
   isShowEdgeTip: true,
   clickNodeIsFocus: true,
+  width: '100%',
+  height: '100vh',
 };
 export default PageIndex;

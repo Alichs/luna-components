@@ -24,20 +24,22 @@ export default () => <Cytoscape data={data} />;
 
 ### Api
 
-| 属性             | 类型         | 是否必填 | 默认值 | 说明                                      |
-| ---------------- | ------------ | -------- | ------ | ----------------------------------------- |
-| data             | object       | 是       |        | 画布的数据                                |
-| styles           | object       | 否       |        | 画布的样式                                |
-| isShowNodeTip    | object       | 否       | true   | 是否展示节点 hover tip                    |
-| isShowEdgeTip    | object       | 否       | true   | 是否展示 edge tip                         |
-| nodeTooltip      | object       | 否       |        | 参考： https://atomiks.github.io/tippyjs/ |
-| edgeTooltip      | object       | 否       |        | 参考： https://atomiks.github.io/tippyjs/ |
-| clickNodeIsFocus | object       | 否       | true   | 点击节点是否聚焦                          |
-| onNodeClick      | (node)=>void | 否       |        | 点击节点事件                              |
-| onNodeMouseOver  | (node)=>void | 否       |        | 节点 hover 事件                           |
-| onNodeMouseOut   | (node)=>void | 否       |        | 节点滑过 out 事件                         |
-| onMouseOutLine   | (edge)=>void | 否       |        | 边滑过 out 事件                           |
-| onMouseOverLine  | (edge)=>void | 否       |        | 边滑过 out 事件                           |
+| 属性             | 类型          | 是否必填 | 默认值 | 说明                                      |
+| ---------------- | ------------- | -------- | ------ | ----------------------------------------- |
+| data             | object        | 是       |        | 画布的数据                                |
+| width            | string,number | 否       |        | 画布宽度                                  |
+| height           | string,number | 否       |        | 画布高度                                  |
+| styles           | object        | 否       |        | 画布的样式                                |
+| isShowNodeTip    | object        | 否       | true   | 是否展示节点 hover tip                    |
+| isShowEdgeTip    | object        | 否       | true   | 是否展示 edge tip                         |
+| nodeTooltip      | object        | 否       |        | 参考： https://atomiks.github.io/tippyjs/ |
+| edgeTooltip      | object        | 否       |        | 参考： https://atomiks.github.io/tippyjs/ |
+| clickNodeIsFocus | object        | 否       | true   | 点击节点是否聚焦                          |
+| onNodeClick      | (node)=>void  | 否       |        | 点击节点事件                              |
+| onNodeMouseOver  | (node)=>void  | 否       |        | 节点 hover 事件                           |
+| onNodeMouseOut   | (node)=>void  | 否       |        | 节点滑过 out 事件                         |
+| onMouseOutLine   | (edge)=>void  | 否       |        | 边滑过 out 事件                           |
+| onMouseOverLine  | (edge)=>void  | 否       |        | 边滑过 out 事件                           |
 
 ### data 画布中的数据
 
