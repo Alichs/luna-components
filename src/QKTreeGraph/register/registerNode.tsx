@@ -9,11 +9,11 @@
 import { styles, labelStyles, commonStyle, baseColor } from '../config/index';
 let WIDTH = 0;
 
-export default (G6) => {
+export default (G6: any) => {
   G6.registerNode(
     'tree-node',
     {
-      draw(cfg, group) {
+      draw(cfg: any, group: any) {
         const {
           name,
           invseRoundName,
@@ -29,12 +29,27 @@ export default (G6) => {
         let styleObj = null; // 节点样式
         let nodeWidth = 0; // label宽度
         const styleType = Object.prototype.toString.call(nodeStyle);
+
         if (styleType === '[object Object]') {
           styleObj = nodeStyle;
           nodeWidth = nodeStyle.width;
         } else if (styleType === '[object String]') {
-          styleObj = styles[nodeStyle];
-          nodeWidth = styles[nodeStyle].width;
+          styleObj =
+            styles[
+              nodeStyle == 'LEFT'
+                ? 'LEFT'
+                : nodeStyle == 'RIGHT'
+                ? 'RIGHT'
+                : 'BOTTOM'
+            ];
+          nodeWidth =
+            styles[
+              nodeStyle == 'LEFT'
+                ? 'LEFT'
+                : nodeStyle == 'RIGHT'
+                ? 'RIGHT'
+                : 'BOTTOM'
+            ].width;
         } else {
           // styleObj = styles['RIGHT'];
           // nodeWidth = styles['RIGHT'].width;
@@ -164,12 +179,12 @@ export default (G6) => {
         }
         return shape;
       },
-      update(cfg, node) {
+      update(cfg: any, node: any) {
         const { collapsed } = cfg;
         const group = node.getContainer();
         const children = group.get('children');
         const icon = children.find(
-          (child) => child.cfg.name === 'collapse-icon',
+          (child: any) => child.cfg.name === 'collapse-icon',
         );
 
         if (icon) {
@@ -184,11 +199,11 @@ export default (G6) => {
 };
 
 /* 注册root节点 */
-export const registerRoot = (G6) => {
+export const registerRoot = (G6: any) => {
   G6.registerNode(
     'root-node',
     {
-      draw(cfg, group) {
+      draw(cfg: any, group: any) {
         const width = Math.ceil(G6.Util.getTextSize(cfg.name, 16)[0]) + 32;
         WIDTH = width;
 

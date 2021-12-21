@@ -25,7 +25,7 @@ type TProps = {
   onNodeClick?: (e: any) => void;
 };
 
-const PageIndex: React.FC<TProps> = (props) => {
+const Index: React.FC<TProps> = (props) => {
   const [graphContainer, setGraphContainer] = useState<any>(null);
   let popperRef: any = null;
   let popperEdgeRef: any = null;
@@ -231,7 +231,7 @@ const PageIndex: React.FC<TProps> = (props) => {
   );
 };
 
-PageIndex.defaultProps = {
+Index.defaultProps = {
   nodeTooltip: {
     placement: 'bottom',
     duration: 2000,
@@ -242,4 +242,4 @@ PageIndex.defaultProps = {
   width: '100%',
   height: '100vh',
 };
-export default PageIndex;
+export default Index;

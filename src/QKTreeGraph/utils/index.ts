@@ -1,9 +1,9 @@
 import { baseColor } from '../config/index';
-import QKutils from 'qk-components';
+import QKutils from '../../utils';
 
 // 股权穿透图谱数据格式化
 export const dataTransform = (data: any) => {
-  QKutils.formmatDataUp(data, (subtree) => {
+  QKutils.formmatDataUp(data, (subtree: any) => {
     const { dataType, conprop, subconam, isPerson } = subtree;
     const flag = dataType === 'INV' ? true : false;
 
@@ -47,7 +47,7 @@ export const dataTransform = (data: any) => {
 
 // 企业合作关系谱数据格式化
 export const dataTransform1 = (data: any) => {
-  QKutils.formmatDataUp(data, (subtree) => {
+  QKutils.formmatDataUp(data, (subtree: any) => {
     const { dataType, count, total } = subtree;
     const flag = dataType === 'bidding' ? true : false;
 

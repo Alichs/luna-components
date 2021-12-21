@@ -16,7 +16,7 @@ interface PropsType {
 }
 
 const QKTreeGraphV: React.FC<PropsType> = (props) => {
-  const [myGraph, setMyGraph] = useState(null);
+  const [myGraph, setMyGraph] = useState<any>(null);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const QKTreeGraphV: React.FC<PropsType> = (props) => {
     return () => {
       // 销毁画布
       if (myGraph) {
-        myGraph.destroy();
+        myGraph.destroy && myGraph.destroy();
       }
     };
   }, []);
@@ -54,7 +54,7 @@ const QKTreeGraphV: React.FC<PropsType> = (props) => {
         direction: 'V',
         getHGap: () => props.hGap,
         getVGap: () => props.vGap,
-        getSide: (d) => {
+        getSide: (d: any) => {
           if (d.data.side == 'left') {
             return 'left';
           }
@@ -110,15 +110,15 @@ const QKTreeGraphV: React.FC<PropsType> = (props) => {
   };
 
   // 注册事件
-  const bindEvents = (graph) => {
-    graph.on('node:click', (e) => {
+  const bindEvents = (graph: any) => {
+    graph.on('node:click', (e: any) => {
       handleNodeClick(e, graph, G6);
     });
     // 鼠标滑上事件
     // isPerson=0为公司，isPerson=1为人
     // 人物需要获取器对应的公司的entId，及父节点的父节点dataId
     // console.log(e.item._cfg.parent._cfg.parent.getModel(), '------');
-    graph.on('node:mouseenter', (e) => {
+    graph.on('node:mouseenter', (e: any) => {
       const { name } = e.target.cfg;
       if (
         name === 'rect-node' ||
@@ -135,7 +135,7 @@ const QKTreeGraphV: React.FC<PropsType> = (props) => {
       }
     });
     // 鼠标离开效果
-    graph.on('node:mouseleave', (e) => {
+    graph.on('node:mouseleave', (e: any) => {
       // 取消hover效果
       if (props.isHover) {
         e.item.setState('hover', false);
@@ -143,15 +143,15 @@ const QKTreeGraphV: React.FC<PropsType> = (props) => {
       props.onNodeMouseLeave && props.onNodeMouseLeave(e, graph, G6);
     });
     // canvas的点击事件，鼠标左键
-    graph.on('canvas:click', (e) => {});
+    graph.on('canvas:click', (e: any) => {});
     // canvas的点击事件，鼠标右键
-    graph.on('canvas:dblclick', (e) => {});
+    graph.on('canvas:dblclick', (e: any) => {});
     // canvas的拖拽事件
-    graph.on('canvas:dragstart', (e) => {});
+    graph.on('canvas:dragstart', (e: any) => {});
     // 滚轮缩放
-    graph.on('wheelzoom', (e) => {});
+    graph.on('wheelzoom', (e: any) => {});
     // 调用 graph.moveTo，graph.translate，或 graph.zoom 均会触发该事件
-    graph.on('viewportchange', (e) => {});
+    graph.on('viewportchange', (e: any) => {});
   };
 
   return (

@@ -1,8 +1,8 @@
 import { edgeStyles } from '../config/index';
 
-export default (G6) => {
+export default (G6: any) => {
   G6.registerEdge('tree-edge', {
-    draw(cfg, group) {
+    draw(cfg: any, group: any) {
       const { startPoint, endPoint } = cfg;
 
       // const model = cfg.targetNode.getModel();
@@ -55,7 +55,9 @@ export default (G6) => {
               ? {
                   fill: endArrowStyle.fill,
                   stroke: endArrowStyle.stroke,
-                  path: arrowPaths[endArrowStyle.direction],
+                  path: arrowPaths[
+                    endArrowStyle.direction == 'bottom' ? 'bottom' : 'top'
+                  ],
                 }
               : '',
             path:
@@ -94,7 +96,9 @@ export default (G6) => {
               ? {
                   fill: endArrowStyle.fill,
                   stroke: endArrowStyle.stroke,
-                  path: arrowPaths[endArrowStyle.direction],
+                  path: arrowPaths[
+                    endArrowStyle.direction == 'bottom' ? 'bottom' : 'top'
+                  ],
                 }
               : '',
             path:
