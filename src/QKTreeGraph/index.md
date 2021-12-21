@@ -119,7 +119,7 @@ export default () => {
 ### Api
 
 | 属性             | 类型                 | 是否必填 | 默认值 | 说明                                                                                         |
-| ---------------- | -------------------- | -------- | ------ | -------------------------------------------------------------------------------------------- | ----------------------------------------- | --- |
+| ---------------- | -------------------- | -------- | ------ | -------------------------------------------------------------------------------------------- |
 | sourceData       | object               | 是       |        | 画布的数据                                                                                   |
 | isHover          | boolean              | 否       | false  | 节点是否有 hover 效果，有为 true，没有为 false，需要在数据 stateStyles 中手动添加 hover 样式 |
 | width            | number, string       | 否       | 800    | 画布宽度                                                                                     |
@@ -127,8 +127,6 @@ export default () => {
 | hGap             | number               | 否       | 18     | 每个节点的水平间隙                                                                           |
 | vGap             | number               | 否       | 18     | 每个节点的垂直间隙                                                                           |
 | onNodeClick      | (e, graph, G6)=>void | 否       |        | 点击节点事件，参数 e:点击事件；graph:图谱实例；G6:G6 实例                                    |
-| <!--             | isShowNodeTip        | boolean  | 否     | false                                                                                        | 是否展示节点 hover tip                    | --> |
-| <!--             | nodeTooltip          | object   | 否     |                                                                                              | 参考： https://atomiks.github.io/tippyjs/ | --> |
 | onNodeMouseEnter | (node)=>void         | 否       |        | 节点 hover 事件                                                                              |
 | onNodeMouseLeave | (node)=>void         | 否       |        | 节点滑过 out 事件                                                                            |
 

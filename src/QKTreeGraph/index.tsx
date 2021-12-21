@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import G6 from '@antv/g6';
+import AbstractGraph from '@antv/g6-core/lib/graph/graph';
 import registerEdge from './register/registerEdge';
 import registerNode, { registerRoot } from './register/registerNode';
 
@@ -16,7 +17,7 @@ interface PropsType {
 }
 
 const QKTreeGraphV: React.FC<PropsType> = (props) => {
-  const [myGraph, setMyGraph] = useState<any>(null);
+  const [myGraph, setMyGraph] = useState<AbstractGraph>(null);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -110,8 +111,8 @@ const QKTreeGraphV: React.FC<PropsType> = (props) => {
   };
 
   // 注册事件
-  const bindEvents = (graph: any) => {
-    graph.on('node:click', (e: any) => {
+  const bindEvents = (graph: AbstractGraph) => {
+    graph.on('node:click', (e) => {
       handleNodeClick(e, graph, G6);
     });
     // 鼠标滑上事件
@@ -129,7 +130,7 @@ const QKTreeGraphV: React.FC<PropsType> = (props) => {
       ) {
         // 设置hover效果
         if (props.isHover) {
-          e.item.setState('hover', true);
+          e.item?.setState('hover', true);
         }
         props.onNodeMouseEnter && props.onNodeMouseEnter(e, graph, G6);
       }
@@ -138,7 +139,7 @@ const QKTreeGraphV: React.FC<PropsType> = (props) => {
     graph.on('node:mouseleave', (e: any) => {
       // 取消hover效果
       if (props.isHover) {
-        e.item.setState('hover', false);
+        e.item?.setState('hover', false);
       }
       props.onNodeMouseLeave && props.onNodeMouseLeave(e, graph, G6);
     });

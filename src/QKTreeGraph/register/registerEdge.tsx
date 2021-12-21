@@ -1,4 +1,7 @@
 import { edgeStyles } from '../config/index';
+import { EdgeConfig } from '@antv/g6-core/lib/types/index';
+// import { IGroup, IShape } from '@antv/g-base/lib/interfaces';
+// import { INode, IEdge } from '@antv/g6-core/lib/interface/item';
 
 export default (G6: any) => {
   G6.registerEdge('tree-edge', {
@@ -8,7 +11,7 @@ export default (G6: any) => {
       // const model = cfg.targetNode.getModel();
       // console.log(style, 'style----');
 
-      const sourceModel = cfg.sourceNode.getModel();
+      const sourceModel = cfg.sourceNode?.getModel();
       const {
         side,
         edgeRight,
@@ -16,7 +19,7 @@ export default (G6: any) => {
         edgeLeftStyle,
         dataType,
         endArrowStyle,
-      } = cfg.targetNode.getModel();
+      } = cfg.targetNode?.getModel();
       const { invseRoundName, isScalable } = sourceModel;
 
       // 开口方向
