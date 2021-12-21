@@ -16,7 +16,7 @@ export default (G6: any) => {
   G6.registerNode(
     'tree-node',
     {
-      draw(cfg: NodeConfig, group: IGroup) {
+      draw(cfg: any, group: IGroup) {
         const {
           name,
           invseRoundName,
@@ -35,7 +35,7 @@ export default (G6: any) => {
 
         if (styleType === '[object Object]') {
           styleObj = nodeStyle;
-          nodeWidth = nodeStyle.width;
+          nodeWidth = nodeStyle?.width;
         } else if (styleType === '[object String]') {
           styleObj =
             styles[

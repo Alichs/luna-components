@@ -22,8 +22,8 @@ interface PropsType {
   onRootNodeEnter?: (e: any, graph: any, G6: any) => void;
 }
 
-const QKTreeGraphV: React.FC<PropsType> = (props) => {
-  const [myGraph, setMyGraph] = useState<AbstractGraph>(null);
+const QKTreeGraphV: React.FC<PropsType> = (props: any) => {
+  const [myGraph, setMyGraph] = useState<AbstractGraph>();
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
