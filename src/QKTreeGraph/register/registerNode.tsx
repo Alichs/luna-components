@@ -2,7 +2,7 @@
  * @Author: guomeijie
  * @Date: 2021-12-08 17:48:50
  * @Last Modified by: guomeijie
- * @Last Modified time: 2021-12-21 18:52:07
+ * @Last Modified time: 2021-12-21 18:54:50
  * @desc 注册自定义节点
  */
 
@@ -97,7 +97,7 @@ export default (G6: any) => {
         let shape = group.addShape('rect', {
           attrs: {
             ...commonStyle,
-            ...styleObj,
+            ...(styleObj as object),
             x: 0,
             y: -20,
             radius,
@@ -141,7 +141,7 @@ export default (G6: any) => {
           group.addShape('rect', {
             attrs: {
               ...commonStyle,
-              ...newBottomNodeStyle,
+              ...(newBottomNodeStyle as object),
               width: nodeWidth,
               radius:
                 !isPerson && side === 'left' ? [6, 6, 0, 0] : [0, 0, 6, 6],

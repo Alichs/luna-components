@@ -8,7 +8,7 @@ group:
   order: 1
 ---
 
-## TreeGraph-V
+## QKTreeGraph
 
 Demo:
 
@@ -118,17 +118,23 @@ export default () => {
 
 ### Api
 
-| 属性             | 类型                 | 是否必填 | 默认值 | 说明                                                                                         |
-| ---------------- | -------------------- | -------- | ------ | -------------------------------------------------------------------------------------------- |
-| sourceData       | object               | 是       |        | 画布的数据                                                                                   |
-| isHover          | boolean              | 否       | false  | 节点是否有 hover 效果，有为 true，没有为 false，需要在数据 stateStyles 中手动添加 hover 样式 |
-| width            | number, string       | 否       | 800    | 画布宽度                                                                                     |
-| height           | number, string       | 否       | 500    | 画布高度                                                                                     |
-| hGap             | number               | 否       | 18     | 每个节点的水平间隙                                                                           |
-| vGap             | number               | 否       | 18     | 每个节点的垂直间隙                                                                           |
-| onNodeClick      | (e, graph, G6)=>void | 否       |        | 点击节点事件，参数 e:点击事件；graph:图谱实例；G6:G6 实例                                    |
-| onNodeMouseEnter | (node)=>void         | 否       |        | 节点 hover 事件                                                                              |
-| onNodeMouseLeave | (node)=>void         | 否       |        | 节点滑过 out 事件                                                                            |
+| 属性              | 类型                 | 是否必填 | 默认值 | 说明                                                                                         |
+| ----------------- | -------------------- | -------- | ------ | -------------------------------------------------------------------------------------------- |
+| sourceData        | object               | 是       |        | 画布的数据                                                                                   |
+| isHover           | boolean              | 否       | false  | 节点是否有 hover 效果，有为 true，没有为 false，需要在数据 stateStyles 中手动添加 hover 样式 |
+| width             | number, string       | 否       | 800    | 画布宽度                                                                                     |
+| height            | number, string       | 否       | 500    | 画布高度                                                                                     |
+| hGap              | number               | 否       | 18     | 每个节点的水平间隙                                                                           |
+| vGap              | number               | 否       | 18     | 每个节点的垂直间隙                                                                           |
+| onNodeClick       | (e, graph, G6)=>void | 否       |        | 点击节点事件，参数 e:点击事件；graph:图谱实例；G6:G6 实例                                    |
+| onCanvasClick     | (e, graph, G6)=>void | 否       |        | canvas 节点事件，参数 e:点击事件；graph:图谱实例；G6:G6 实例                                 |
+| onCanvasDBClick   | (e, graph, G6)=>void | 否       |        | canvas 双击节点事件，参数 e:点击事件；graph:图谱实例；G6:G6 实例                             |
+| onCanvasDragstart | (e, graph, G6)=>void | 否       |        | canvas 拖拽开始事件，参数 e:点击事件；graph:图谱实例；G6:G6 实例                             |
+| onWheelzoom       | (e, graph, G6)=>void | 否       |        | 滚轮事件，参数 e:点击事件；graph:图谱实例；G6:G6 实例                                        |
+| onViewportchange  | (e, graph, G6)=>void | 否       |        | viewport 事件，参数 e:点击事件；graph:图谱实例；G6:G6 实例                                   |
+| onRootNodeEnter   | (e, graph, G6)=>void | 否       |        | root 节点滑上事件，参数 e:点击事件；graph:图谱实例；G6:G6 实例                               |
+| onNodeMouseEnter  | (node)=>void         | 否       |        | 节点 hover 事件                                                                              |
+| onNodeMouseLeave  | (node)=>void         | 否       |        | 节点滑过 out 事件                                                                            |
 
 ### Data
 

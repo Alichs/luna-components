@@ -12,8 +12,14 @@ interface PropsType {
   hGap: number;
   vGap: number;
   onNodeClick?: (e: any, graph: any, G6: any) => void; // 节点点击事件
-  onNodeMouseEnter: (e: any, graph: any, G6: any) => void;
-  onNodeMouseLeave: (e: any, graph: any, G6: any) => void;
+  onNodeMouseEnter?: (e: any, graph: any, G6: any) => void;
+  onNodeMouseLeave?: (e: any, graph: any, G6: any) => void;
+  onCanvasClick?: (e: any, graph: any, G6: any) => void;
+  onCanvasDBClick?: (e: any, graph: any, G6: any) => void;
+  onCanvasDragstart?: (e: any, graph: any, G6: any) => void;
+  onWheelzoom?: (e: any, graph: any, G6: any) => void;
+  onViewportchange?: (e: any, graph: any, G6: any) => void;
+  onRootNodeEnter?: (e: any, graph: any, G6: any) => void;
 }
 
 const QKTreeGraphV: React.FC<PropsType> = (props) => {
@@ -133,6 +139,8 @@ const QKTreeGraphV: React.FC<PropsType> = (props) => {
           e.item?.setState('hover', true);
         }
         props.onNodeMouseEnter && props.onNodeMouseEnter(e, graph, G6);
+      } else if (name === 'root-node' || name === 'root-node-text') {
+        props.onRootNodeEnter && props.onRootNodeEnter();
       }
     });
     // 鼠标离开效果
@@ -144,15 +152,25 @@ const QKTreeGraphV: React.FC<PropsType> = (props) => {
       props.onNodeMouseLeave && props.onNodeMouseLeave(e, graph, G6);
     });
     // canvas的点击事件，鼠标左键
-    graph.on('canvas:click', (e: any) => {});
+    graph.on('canvas:click', (e: any) => {
+      props.onCanvasClick && props.onCanvasClick(e, graph, G6);
+    });
     // canvas的点击事件，鼠标右键
-    graph.on('canvas:dblclick', (e: any) => {});
+    graph.on('canvas:dblclick', (e: any) => {
+      props.onCanvasDBClick && props.onCanvasDBClick(e, graph, G6);
+    });
     // canvas的拖拽事件
-    graph.on('canvas:dragstart', (e: any) => {});
+    graph.on('canvas:dragstart', (e: any) => {
+      props.onCanvasDragstart && props.onCanvasDragstart(e, graph, G6);
+    });
     // 滚轮缩放
-    graph.on('wheelzoom', (e: any) => {});
+    graph.on('wheelzoom', (e: any) => {
+      props.onWheelzoom && props.onWheelzoom(e, graph, G6);
+    });
     // 调用 graph.moveTo，graph.translate，或 graph.zoom 均会触发该事件
-    graph.on('viewportchange', (e: any) => {});
+    graph.on('viewportchange', (e: any) => {
+      props.onViewportchange && props.onViewportchange(e, graph, G6);
+    });
   };
 
   return (

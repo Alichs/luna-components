@@ -1,7 +1,7 @@
 /* 自定义企业信息卡片 */
 import React from 'react';
 import { Image } from 'antd';
-import styles from './css/tooltip.less';
+import './css/tooltip.less';
 import { openParent } from '../utils/index';
 // const noData = require('@/assets/nodata.png');
 
@@ -33,9 +33,9 @@ const tagsColor = [
 
 const LabelValue: React.FC<PropTypesLabel> = ({ key, label, value }) => {
   return (
-    <div key={key} className={styles['label-value-box']}>
-      <span className={styles['tooltip-label']}>{label}</span>
-      <span className={styles['tooltip-value']}>{value || '-'}</span>
+    <div key={key} className="label-value-box">
+      <span className="tooltip-label">{label}</span>
+      <span className="tooltip-value">{value || '-'}</span>
     </div>
   );
 };
@@ -53,14 +53,14 @@ const MyTooltip: React.FC<PropTypes> = ({ data }) => {
   return (
     <>
       {JSON.stringify(data) === '{}' ? (
-        <div className={styles['tooltip-nodata']}>
+        <div className="tooltip-nodata">
           <img src="" />
           暂无数据
         </div>
       ) : (
-        <div className={styles['my-tooltip']}>
-          <div className={styles['tooltip-top']}>
-            <div className={styles['top-left']}>
+        <div className="my-tooltip">
+          <div className="tooltip-top">
+            <div className="top-left">
               <Image
                 width={52}
                 height={52}
@@ -70,9 +70,9 @@ const MyTooltip: React.FC<PropTypes> = ({ data }) => {
                 className="img-logo"
               />
             </div>
-            <div className={styles['top-right']}>
+            <div className="top-right">
               <div
-                className={styles['person-name']}
+                className="person-name"
                 style={{
                   color: data.dataId ? '#4B74FF' : '#363b4d',
                   cursor: data.dataId ? 'pointer' : '',
@@ -84,14 +84,14 @@ const MyTooltip: React.FC<PropTypes> = ({ data }) => {
                 {data.name || '-'}
               </div>
               {data.tags ? (
-                <div className={styles['tags-box']}>
+                <div className="tags-box">
                   {data.tags.map((tag, index) => (
                     <div
                       style={{
                         color: tagsColor[index % 5].color,
                         background: tagsColor[index % 5].bg,
                       }}
-                      className={styles['tooltip-tag']}
+                      className="tooltip-tag"
                       key={tag}
                     >
                       {tag}
@@ -114,7 +114,7 @@ const MyTooltip: React.FC<PropTypes> = ({ data }) => {
             </div>
           </div>
           {data.nums ? (
-            <div className={styles['tooltip-bottom']}>
+            <div className="tooltip-bottom">
               {data.nums.map((num, index) => (
                 <LabelValue
                   key={`${num.value}-${index}`}
