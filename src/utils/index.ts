@@ -1,6 +1,6 @@
 import G6 from '@antv/g6';
 
-const formmatDataUp = (data: any, fn: any) => {
+const formmatDataUp = (data: any, fn: (item: any) => void) => {
   G6.Util.traverseTreeUp(data, (subtree: any) => fn(subtree));
 };
 

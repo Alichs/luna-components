@@ -8,7 +8,7 @@ group:
   order: 1
 ---
 
-## Tooltip
+## GraphTooltip
 
 Demo:
 

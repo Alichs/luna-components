@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import G6 from '@antv/g6';
+import AbstractGraph from '@antv/g6-core/lib/graph/graph';
 import registerEdge from './register/registerEdge';
 import registerNode, { registerRoot } from './register/registerNode';
 
@@ -11,12 +12,18 @@ interface PropsType {
   hGap: number;
   vGap: number;
   onNodeClick?: (e: any, graph: any, G6: any) => void; // 节点点击事件
-  onNodeMouseEnter: (e: any, graph: any, G6: any) => void;
-  onNodeMouseLeave: (e: any, graph: any, G6: any) => void;
+  onNodeMouseEnter?: (e: any, graph: any, G6: any) => void;
+  onNodeMouseLeave?: (e: any, graph: any, G6: any) => void;
+  onCanvasClick?: (e: any, graph: any, G6: any) => void;
+  onCanvasDBClick?: (e: any, graph: any, G6: any) => void;
+  onCanvasDragstart?: (e: any, graph: any, G6: any) => void;
+  onWheelzoom?: (e: any, graph: any, G6: any) => void;
+  onViewportchange?: (e: any, graph: any, G6: any) => void;
+  onRootNodeEnter?: (e: any, graph: any, G6: any) => void;
 }
 
 const QKTreeGraphV: React.FC<PropsType> = (props) => {
-  const [myGraph, setMyGraph] = useState<any>(null);
+  const [myGraph, setMyGraph] = useState<AbstractGraph>(null);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -110,8 +117,8 @@ const QKTreeGraphV: React.FC<PropsType> = (props) => {
   };
 
   // 注册事件
-  const bindEvents = (graph: any) => {
-    graph.on('node:click', (e: any) => {
+  const bindEvents = (graph: AbstractGraph) => {
+    graph.on('node:click', (e) => {
       handleNodeClick(e, graph, G6);
     });
     // 鼠标滑上事件
@@ -129,29 +136,41 @@ const QKTreeGraphV: React.FC<PropsType> = (props) => {
       ) {
         // 设置hover效果
         if (props.isHover) {
-          e.item.setState('hover', true);
+          e.item?.setState('hover', true);
         }
         props.onNodeMouseEnter && props.onNodeMouseEnter(e, graph, G6);
+      } else if (name === 'root-node' || name === 'root-node-text') {
+        props.onRootNodeEnter && props.onRootNodeEnter();
       }
     });
     // 鼠标离开效果
     graph.on('node:mouseleave', (e: any) => {
       // 取消hover效果
       if (props.isHover) {
-        e.item.setState('hover', false);
+        e.item?.setState('hover', false);
       }
       props.onNodeMouseLeave && props.onNodeMouseLeave(e, graph, G6);
     });
     // canvas的点击事件，鼠标左键
-    graph.on('canvas:click', (e: any) => {});
+    graph.on('canvas:click', (e: any) => {
+      props.onCanvasClick && props.onCanvasClick(e, graph, G6);
+    });
     // canvas的点击事件，鼠标右键
-    graph.on('canvas:dblclick', (e: any) => {});
+    graph.on('canvas:dblclick', (e: any) => {
+      props.onCanvasDBClick && props.onCanvasDBClick(e, graph, G6);
+    });
     // canvas的拖拽事件
-    graph.on('canvas:dragstart', (e: any) => {});
+    graph.on('canvas:dragstart', (e: any) => {
+      props.onCanvasDragstart && props.onCanvasDragstart(e, graph, G6);
+    });
     // 滚轮缩放
-    graph.on('wheelzoom', (e: any) => {});
+    graph.on('wheelzoom', (e: any) => {
+      props.onWheelzoom && props.onWheelzoom(e, graph, G6);
+    });
     // 调用 graph.moveTo，graph.translate，或 graph.zoom 均会触发该事件
-    graph.on('viewportchange', (e: any) => {});
+    graph.on('viewportchange', (e: any) => {
+      props.onViewportchange && props.onViewportchange(e, graph, G6);
+    });
   };
 
   return (

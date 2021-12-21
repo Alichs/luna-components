@@ -2,10 +2,13 @@
  * @Author: guomeijie
  * @Date: 2021-12-08 17:48:50
  * @Last Modified by: guomeijie
- * @Last Modified time: 2021-12-20 15:31:42
+ * @Last Modified time: 2021-12-21 18:54:50
  * @desc 注册自定义节点
  */
 
+import { NodeConfig } from '@antv/g6-core/lib/types/index';
+import { IGroup, IShape } from '@antv/g-base/lib/interfaces';
+import { INode } from '@antv/g6-core/lib/interface/item';
 import { styles, labelStyles, commonStyle, baseColor } from '../config/index';
 let WIDTH = 0;
 
@@ -13,7 +16,7 @@ export default (G6: any) => {
   G6.registerNode(
     'tree-node',
     {
-      draw(cfg: any, group: any) {
+      draw(cfg: NodeConfig, group: IGroup) {
         const {
           name,
           invseRoundName,
@@ -93,8 +96,8 @@ export default (G6: any) => {
         // INV && !isPerson 采用CON样式
         let shape = group.addShape('rect', {
           attrs: {
-            ...styleObj,
             ...commonStyle,
+            ...(styleObj as object),
             x: 0,
             y: -20,
             radius,
@@ -105,8 +108,8 @@ export default (G6: any) => {
         // name
         group.addShape('text', {
           attrs: {
-            ...labelStyles.name,
             ...commonStyle,
+            ...labelStyles.name,
             text: name.length > 10 ? name.slice(0, 10) + '...' : name,
             width: nodeWidth,
             x: nodeWidth / 2,
@@ -119,8 +122,8 @@ export default (G6: any) => {
         // 金额
         group.addShape('text', {
           attrs: {
-            ...labelStyles.conprop,
             ...commonStyle,
+            ...labelStyles.conprop,
             text: rectText ? rectText : '',
             width: nodeWidth,
             x: nodeWidth / 2,
@@ -137,8 +140,8 @@ export default (G6: any) => {
         ) {
           group.addShape('rect', {
             attrs: {
-              ...newBottomNodeStyle,
               ...commonStyle,
+              ...(newBottomNodeStyle as object),
               width: nodeWidth,
               radius:
                 !isPerson && side === 'left' ? [6, 6, 0, 0] : [0, 0, 6, 6],
@@ -149,8 +152,8 @@ export default (G6: any) => {
           });
           group.addShape('text', {
             attrs: {
-              ...labelStyles.invseRoundName,
               ...commonStyle,
+              ...labelStyles.invseRoundName,
               x: nodeWidth / 2,
               y: !isPerson && side === 'left' ? -24 : 75,
               text: invseRoundName || '融资',
@@ -179,12 +182,12 @@ export default (G6: any) => {
         }
         return shape;
       },
-      update(cfg: any, node: any) {
+      update(cfg: NodeConfig, node: INode) {
         const { collapsed } = cfg;
         const group = node.getContainer();
         const children = group.get('children');
         const icon = children.find(
-          (child: any) => child.cfg.name === 'collapse-icon',
+          (child: IShape) => child.cfg.name === 'collapse-icon',
         );
 
         if (icon) {
