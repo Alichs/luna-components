@@ -140,7 +140,7 @@ const QKTreeGraphV: React.FC<PropsType> = (props) => {
         }
         props.onNodeMouseEnter && props.onNodeMouseEnter(e, graph, G6);
       } else if (name === 'root-node' || name === 'root-node-text') {
-        props.onRootNodeEnter && props.onRootNodeEnter();
+        props.onRootNodeEnter && props.onRootNodeEnter(e, graph, G6);
       }
     });
     // 鼠标离开效果
