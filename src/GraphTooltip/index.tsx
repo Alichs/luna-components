@@ -3,7 +3,7 @@ import React from 'react';
 import { Image } from 'antd';
 import './css/tooltip.less';
 import { openParent } from '../utils/index';
-// const noData = require('@/assets/nodata.png');
+const noData = require('@/assets/nodata.png');
 
 interface PropTypes {
   data: {
@@ -15,6 +15,7 @@ interface PropTypes {
     infos?: { label: string; value: string }[];
     tags?: [];
   };
+  imptyImg?: string;
 }
 
 interface PropTypesLabel {
@@ -54,7 +55,7 @@ const MyTooltip: React.FC<PropTypes> = ({ data }) => {
     <>
       {JSON.stringify(data) === '{}' ? (
         <div className="tooltip-nodata">
-          <img src="" />
+          <img src={noData} />
           暂无数据
         </div>
       ) : (

@@ -15,10 +15,18 @@ Demo:
 ```tsx
 import React from 'react';
 import { GraphTooltip } from 'qk-components';
-import { tooltipData } from './data';
+import { tooltipData, tooltipData1 } from './data';
 
 export default () => {
-  return <GraphTooltip data={tooltipData} />;
+  return (
+    <div>
+      <GraphTooltip data={tooltipData} />
+      <br />
+      <GraphTooltip data={{}} />
+      <br />
+      <GraphTooltip data={tooltipData1} />
+    </div>
+  );
 };
 ```
 
