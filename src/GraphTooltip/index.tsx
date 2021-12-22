@@ -3,8 +3,6 @@ import React from 'react';
 import { Image } from 'antd';
 import './css/tooltip.less';
 import { openParent } from '../utils/index';
-// import noData from '../assets/nodata.png';
-// import noData from '@/assets/nodata.png';
 
 interface PropTypes {
   data: {
@@ -13,16 +11,15 @@ interface PropTypes {
     name: string;
     dataId?: string;
     nums?: { label: string; value: string }[];
-    infos?: { label: string; value: string }[];
+    infos?: { label: string; value: string; entId?: string }[];
     tags?: [];
   };
-  imptyImg?: string;
 }
 
 interface PropTypesLabel {
-  key: string;
   label: string;
   value: string;
+  entId?: string;
 }
 
 const tagsColor = [
@@ -33,11 +30,26 @@ const tagsColor = [
   { bg: '#FEE9E9', color: '#F62828' },
 ];
 
-const LabelValue: React.FC<PropTypesLabel> = ({ key, label, value }) => {
+const goToGraph = (entId: string) => {
+  openParent('detail?entId=' + entId);
+};
+
+const LabelValue: React.FC<PropTypesLabel> = ({ label, value, entId }) => {
   return (
-    <div key={key} className="label-value-box">
+    <div className="label-value-box">
       <span className="tooltip-label">{label}</span>
-      <span className="tooltip-value">{value || '-'}</span>
+      <span
+        className="tooltip-value"
+        style={{
+          color: entId ? '#4b74ff' : '#363b4d',
+          cursor: entId ? 'pointer' : '',
+        }}
+        onClick={() => {
+          entId && goToGraph(entId);
+        }}
+      >
+        {value || '-'}
+      </span>
     </div>
   );
 };
@@ -49,9 +61,6 @@ const MyTooltip: React.FC<PropTypes> = ({ data }) => {
       : `${data.pic}!qikewater`
     : '';
 
-  const goToGraph = (entId: string) => {
-    openParent('detail?entId=' + entId);
-  };
   return (
     <>
       {JSON.stringify(data) === '{}' ? (
@@ -110,6 +119,7 @@ const MyTooltip: React.FC<PropTypes> = ({ data }) => {
                       key={`${info.value}-${index}`}
                       label={info.label}
                       value={info.value || '-'}
+                      entId={info.entId}
                     />
                   ))}
               </div>
