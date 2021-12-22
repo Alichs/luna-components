@@ -1,7 +1,7 @@
 {
   "private": false,
   "name": "qk-components",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "publishConfig": {
     "registry": "http://nexus.qike366.com/repository/qike-components/"
   },
