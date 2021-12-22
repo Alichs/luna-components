@@ -48,6 +48,7 @@ export const tooltipData1 = {
     {
       label: '企业:',
       value: '小米科技有限责任公司',
+      entId: 'eMBp0ahTid3',
     },
     {
       label: '职位:',
