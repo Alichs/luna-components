@@ -32,6 +32,8 @@ export default () => {
         data={tooltipData}
         onValueClick={goToGraph}
         onTitleClick={goToGraph}
+        width={324}
+        // height={140}
       />
       <br />
       <GraphTooltip data={{}} />
@@ -40,6 +42,7 @@ export default () => {
         data={tooltipData1}
         onValueClick={goToGraph}
         onTitleClick={goToGraph}
+        width={280}
       />
     </div>
   );
