@@ -17,7 +17,7 @@ import { TreeGraphData } from '@antv/g6-core/lib/types/index';
 //   [key: string]: unknown;
 // }
 
-interface INodeStyle {
+export interface INodeStyle {
   width: number;
   height: number;
   radius?: number;
