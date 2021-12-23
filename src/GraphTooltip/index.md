@@ -16,15 +16,31 @@ Demo:
 import React from 'react';
 import { GraphTooltip } from 'qk-components';
 import { tooltipData, tooltipData1 } from './data';
+import { openParent } from '../utils/index';
+
+type labelValue = { value: string; label?: string; entId?: string };
 
 export default () => {
+  const goToGraph = (data: labelValue) => {
+    const { entId } = data;
+    entId && openParent('detail?entId=' + entId);
+  };
+
   return (
     <div>
-      <GraphTooltip data={tooltipData} />
+      <GraphTooltip
+        data={tooltipData}
+        onValueClick={goToGraph}
+        onTitleClick={goToGraph}
+      />
       <br />
       <GraphTooltip data={{}} />
       <br />
-      <GraphTooltip data={tooltipData1} />
+      <GraphTooltip
+        data={tooltipData1}
+        onValueClick={goToGraph}
+        onTitleClick={goToGraph}
+      />
     </div>
   );
 };
@@ -32,9 +48,11 @@ export default () => {
 
 ### Api
 
-| 属性 | 类型   | 是否必填 | 默认值 | 说明         |
-| ---- | ------ | -------- | ------ | ------------ |
-| data | object | 是       |        | Tooltip 数据 |
+| 属性         | 类型   | 是否必填 | 默认值 | 说明             |
+| ------------ | ------ | -------- | ------ | ---------------- |
+| data         | object | 是       |        | Tooltip 数据     |
+| onValueClick | fn     | 否       |        | 基本信息点击事件 |
+| onTitleClick | fn     | 否       |        | 标题点击事件     |
 
 ### data 画布中的数据
 

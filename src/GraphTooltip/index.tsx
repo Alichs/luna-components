@@ -2,7 +2,8 @@
 import React from 'react';
 import { Image } from 'antd';
 import './css/tooltip.less';
-import { openParent } from '../utils/index';
+
+type labelValue = { value: string; label?: string; entId?: string };
 
 interface PropTypes {
   data: {
@@ -10,16 +11,18 @@ interface PropTypes {
     pic: string;
     name: string;
     dataId?: string;
-    nums?: { label: string; value: string }[];
-    infos?: { label: string; value: string; entId?: string }[];
+    nums?: labelValue[];
+    infos?: labelValue[];
     tags?: [];
   };
+  onTitleClick?: (data: labelValue) => void;
+  onValueClick?: (data: labelValue) => void;
 }
 
 interface PropTypesLabel {
-  label: string;
-  value: string;
-  entId?: string;
+  data: labelValue;
+  onValueClick?: (data: labelValue) => void;
+  onTitleClick?: (data: labelValue) => void;
 }
 
 const tagsColor = [
@@ -30,14 +33,11 @@ const tagsColor = [
   { bg: '#FEE9E9', color: '#F62828' },
 ];
 
-const goToGraph = (entId: string) => {
-  openParent('detail?entId=' + entId);
-};
-
-const LabelValue: React.FC<PropTypesLabel> = ({ label, value, entId }) => {
+const LabelValue: React.FC<PropTypesLabel> = (props) => {
+  const { value, label, entId } = props.data;
   return (
     <div className="label-value-box">
-      <span className="tooltip-label">{label}</span>
+      <span className="tooltip-label">{label || '-'}</span>
       <span
         className="tooltip-value"
         style={{
@@ -45,7 +45,7 @@ const LabelValue: React.FC<PropTypesLabel> = ({ label, value, entId }) => {
           cursor: entId ? 'pointer' : '',
         }}
         onClick={() => {
-          entId && goToGraph(entId);
+          props.onValueClick && props.onValueClick(props.data);
         }}
       >
         {value || '-'}
@@ -54,7 +54,8 @@ const LabelValue: React.FC<PropTypesLabel> = ({ label, value, entId }) => {
   );
 };
 
-const MyTooltip: React.FC<PropTypes> = ({ data }) => {
+const MyTooltip: React.FC<PropTypes> = (props) => {
+  const { data } = props;
   const logo = data.pic
     ? data.pic?.slice(0, 4) === 'data'
       ? data.pic
@@ -89,7 +90,11 @@ const MyTooltip: React.FC<PropTypes> = ({ data }) => {
                   cursor: data.dataId ? 'pointer' : '',
                 }}
                 onClick={() => {
-                  data.dataId && goToGraph(data.dataId);
+                  props.onTitleClick &&
+                    props.onTitleClick({
+                      value: data.name,
+                      entId: data.dataId,
+                    });
                 }}
               >
                 {data.name || '-'}
@@ -117,9 +122,8 @@ const MyTooltip: React.FC<PropTypes> = ({ data }) => {
                   data.infos.map((info, index) => (
                     <LabelValue
                       key={`${info.value}-${index}`}
-                      label={info.label}
-                      value={info.value || '-'}
-                      entId={info.entId}
+                      data={info}
+                      onValueClick={props.onValueClick}
                     />
                   ))}
               </div>
@@ -130,8 +134,8 @@ const MyTooltip: React.FC<PropTypes> = ({ data }) => {
               {data.nums.map((num, index) => (
                 <LabelValue
                   key={`${num.value}-${index}`}
-                  label={num.label}
-                  value={num.value || '-'}
+                  data={num}
+                  onValueClick={props.onValueClick}
                 />
               ))}
             </div>

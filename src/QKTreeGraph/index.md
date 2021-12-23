@@ -91,16 +91,10 @@ export default () => {
         isHover={true}
         width="100%"
         height="100vh"
-        onNodeClick={(e: any, graph: any, G6: any) => {
-          handleNodeClick(e, graph, G6);
-        }}
+        onNodeClick={handleNodeClick}
         isShowNodeTip={false}
-        onNodeMouseEnter={(e: any, graph: any, G6: any) => {
-          handleNodeMouseEnter(e, graph, G6);
-        }}
-        onNodeMouseLeave={(e: any, graph: any, G6: any) => {
-          handleNodeMouseLeave(e, graph, G6);
-        }}
+        onNodeMouseEnter={handleNodeMouseEnter}
+        onNodeMouseLeave={handleNodeMouseLeave}
       />
       {tooltipShow && (
         <div
