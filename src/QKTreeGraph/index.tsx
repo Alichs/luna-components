@@ -3,9 +3,10 @@ import G6 from '@antv/g6';
 import AbstractGraph from '@antv/g6-core/lib/graph/graph';
 import registerEdge from './register/registerEdge';
 import registerNode, { registerRoot } from './register/registerNode';
+import { ISourceData } from './types/index';
 
 interface PropsType {
-  sourceData: any;
+  sourceData: ISourceData;
   width?: number | string;
   height?: number | string;
   isHover: boolean; // 是否需要鼠标滑上效果，效果配置在数据中stateStyles
@@ -92,7 +93,8 @@ const QKTreeGraphV: React.FC<PropsType> = (props: any) => {
 
     graph.data(props.sourceData);
     graph.render();
-    graph.fitView();
+    // graph.fitView();
+    graph.fitCenter();
     bindEvents(graph);
     setMyGraph(graph);
   };

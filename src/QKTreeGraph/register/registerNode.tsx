@@ -2,7 +2,7 @@
  * @Author: guomeijie
  * @Date: 2021-12-08 17:48:50
  * @Last Modified by: guomeijie
- * @Last Modified time: 2021-12-21 18:54:50
+ * @Last Modified time: 2021-12-23 19:11:43
  * @desc 注册自定义节点
  */
 
@@ -10,6 +10,7 @@ import { NodeConfig } from '@antv/g6-core/lib/types/index';
 import { IGroup, IShape } from '@antv/g-base/lib/interfaces';
 import { INode } from '@antv/g6-core/lib/interface/item';
 import { styles, labelStyles, commonStyle, baseColor } from '../config/index';
+import { INodeStyle } from '../types/index';
 let WIDTH = 0;
 
 export default (G6: any) => {
@@ -34,25 +35,11 @@ export default (G6: any) => {
         const styleType = Object.prototype.toString.call(nodeStyle);
 
         if (styleType === '[object Object]') {
-          styleObj = nodeStyle;
-          nodeWidth = nodeStyle?.width;
+          styleObj = nodeStyle as INodeStyle;
+          nodeWidth = styleObj.width;
         } else if (styleType === '[object String]') {
-          styleObj =
-            styles[
-              nodeStyle == 'LEFT'
-                ? 'LEFT'
-                : nodeStyle == 'RIGHT'
-                ? 'RIGHT'
-                : 'BOTTOM'
-            ];
-          nodeWidth =
-            styles[
-              nodeStyle == 'LEFT'
-                ? 'LEFT'
-                : nodeStyle == 'RIGHT'
-                ? 'RIGHT'
-                : 'BOTTOM'
-            ].width;
+          styleObj = styles[nodeStyle as 'LEFT' | 'RIGHT' | 'BOTTOM'];
+          nodeWidth = styles[nodeStyle as 'LEFT' | 'RIGHT' | 'BOTTOM'].width;
         } else {
           // styleObj = styles['RIGHT'];
           // nodeWidth = styles['RIGHT'].width;
