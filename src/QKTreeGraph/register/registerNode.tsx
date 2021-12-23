@@ -2,7 +2,7 @@
  * @Author: guomeijie
  * @Date: 2021-12-08 17:48:50
  * @Last Modified by: guomeijie
- * @Last Modified time: 2021-12-23 17:59:46
+ * @Last Modified time: 2021-12-23 19:11:43
  * @desc 注册自定义节点
  */
 
@@ -17,7 +17,7 @@ export default (G6: any) => {
   G6.registerNode(
     'tree-node',
     {
-      draw(cfg: NodeConfig, group: IGroup) {
+      draw(cfg: any, group: IGroup) {
         const {
           name,
           invseRoundName,
@@ -39,22 +39,7 @@ export default (G6: any) => {
           nodeWidth = styleObj.width;
         } else if (styleType === '[object String]') {
           styleObj = styles[nodeStyle as 'LEFT' | 'RIGHT' | 'BOTTOM'];
-          // styles[
-          //   nodeStyle == 'LEFT'
-          //     ? 'LEFT'
-          //     : nodeStyle == 'RIGHT'
-          //     ? 'RIGHT'
-          //     : 'BOTTOM'
-          // ];
-          // styles[nodeStyle as 'LEFT' | 'RIGHT' | 'BOTTOM'];
           nodeWidth = styles[nodeStyle as 'LEFT' | 'RIGHT' | 'BOTTOM'].width;
-          // styles[
-          //   nodeStyle == 'LEFT'
-          //     ? 'LEFT'
-          //     : nodeStyle == 'RIGHT'
-          //     ? 'RIGHT'
-          //     : 'BOTTOM'
-          // ].width;
         } else {
           // styleObj = styles['RIGHT'];
           // nodeWidth = styles['RIGHT'].width;
