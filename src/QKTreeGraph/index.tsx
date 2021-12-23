@@ -92,7 +92,8 @@ const QKTreeGraphV: React.FC<PropsType> = (props) => {
 
     graph.data(props.sourceData);
     graph.render();
-    graph.fitView();
+    // graph.fitView();
+    graph.fitCenter();
     bindEvents(graph);
     setMyGraph(graph);
   };
