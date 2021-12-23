@@ -2,7 +2,7 @@
  * @Author: guomeijie
  * @Date: 2021-12-08 17:48:50
  * @Last Modified by: guomeijie
- * @Last Modified time: 2021-12-23 16:09:26
+ * @Last Modified time: 2021-12-23 17:59:46
  * @desc 注册自定义节点
  */
 
@@ -38,22 +38,23 @@ export default (G6: any) => {
           styleObj = nodeStyle as INodeStyle;
           nodeWidth = styleObj.width;
         } else if (styleType === '[object String]') {
-          styleObj =
-            styles[
-              nodeStyle == 'LEFT'
-                ? 'LEFT'
-                : nodeStyle == 'RIGHT'
-                ? 'RIGHT'
-                : 'BOTTOM'
-            ];
-          nodeWidth =
-            styles[
-              nodeStyle == 'LEFT'
-                ? 'LEFT'
-                : nodeStyle == 'RIGHT'
-                ? 'RIGHT'
-                : 'BOTTOM'
-            ].width;
+          styleObj = styles[nodeStyle as 'LEFT' | 'RIGHT' | 'BOTTOM'];
+          // styles[
+          //   nodeStyle == 'LEFT'
+          //     ? 'LEFT'
+          //     : nodeStyle == 'RIGHT'
+          //     ? 'RIGHT'
+          //     : 'BOTTOM'
+          // ];
+          // styles[nodeStyle as 'LEFT' | 'RIGHT' | 'BOTTOM'];
+          nodeWidth = styles[nodeStyle as 'LEFT' | 'RIGHT' | 'BOTTOM'].width;
+          // styles[
+          //   nodeStyle == 'LEFT'
+          //     ? 'LEFT'
+          //     : nodeStyle == 'RIGHT'
+          //     ? 'RIGHT'
+          //     : 'BOTTOM'
+          // ].width;
         } else {
           // styleObj = styles['RIGHT'];
           // nodeWidth = styles['RIGHT'].width;
