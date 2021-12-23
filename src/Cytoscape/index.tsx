@@ -139,6 +139,7 @@ const Index: React.FC<TProps> = (props) => {
         popperEdgeRef = new (Tippy as any)(dummyDomEle, {
           // tippy props:
           getReferenceClientRect: ref.getBoundingClientRect,
+          appendTo: document.getElementById('ID-RELATION'),
           trigger: 'manual',
           arrow: false,
           offset: [0, 10],
@@ -224,6 +225,7 @@ const Index: React.FC<TProps> = (props) => {
   return (
     <>
       <div
+        id="ID-RELATION"
         ref={setGraphContainer}
         style={{ height: props.height, width: props.width }}
       />
